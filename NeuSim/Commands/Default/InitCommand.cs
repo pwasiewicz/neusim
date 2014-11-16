@@ -1,8 +1,8 @@
 ﻿namespace NeuSim.Commands.Default
 {
-    using System.IO;
     using NeuSim.Arguments;
     using NeuSim.Context;
+    using System.IO;
 
     internal class InitCommand : CommandBase<InitSubOptions>
     {
@@ -28,14 +28,8 @@
                 return false;
             }
 
-            var dirInfo = new DirectoryInfo(this.SessionContext.ContextDirectory)
-                          {
-                              Attributes =
-                                  FileAttributes.Directory |
-                                  FileAttributes.Hidden
-                          };
-
-            dirInfo.Create();
+            var dirInfo = Directory.CreateDirectory(this.SessionContext.ContextDirectory);
+            dirInfo.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
 
             return true;
         }

@@ -1,1 +1,10 @@
 C:\VS\NeuSim\NeuSim\bin\Debug\NeuSim.exe.config
+C:\VS\neusim\NeuSim\bin\Debug\NeuSim.exe
+C:\VS\neusim\NeuSim\bin\Debug\NeuSim.pdb
+C:\VS\neusim\NeuSim\bin\Debug\CommandLine.dll
+C:\VS\neusim\NeuSim\bin\Debug\Newtonsoft.Json.dll
+C:\VS\neusim\NeuSim\bin\Debug\CommandLine.xml
+C:\VS\neusim\NeuSim\bin\Debug\Newtonsoft.Json.xml
+C:\VS\neusim\NeuSim\obj\Debug\NeuSim.csprojResolveAssemblyReference.cache
+C:\VS\neusim\NeuSim\obj\Debug\NeuSim.exe
+C:\VS\neusim\NeuSim\obj\Debug\NeuSim.pdb

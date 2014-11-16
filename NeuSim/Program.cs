@@ -15,13 +15,18 @@
             string invokedVerb = null;
             object invokerVerbOptions = null;
 
-            if (!Parser.Default.ParseArguments(args, options, (verCommand, verbOptions) =>
+            var parser = new Parser(settings =>
+                                    {
+                                        settings.HelpWriter = Console.Out;
+                                        settings.IgnoreUnknownArguments = false;
+                                    });
+
+            if (!parser.ParseArgumentsStrict(args, options, (verCommand, verbOptions) =>
             {
                 invokedVerb = verCommand;
                 invokerVerbOptions = verbOptions;
             }))
             {
-                // TODO print help;
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
