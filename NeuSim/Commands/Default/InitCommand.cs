@@ -32,7 +32,7 @@
             var dirInfo = Directory.CreateDirectory(this.SessionContext.ContextDirectory);
             dirInfo.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
 
-            var network = new NeuronNetwork(command.Inputs, command.HiddenInputs, null);
+            var network = new NeuronNetwork(command.Inputs, command.HiddenInputs, NeuronNetworkContext.BuildDefault());
             using (
                 var stream = new FileStream(this.SessionContext.NetworkPath, FileMode.CreateNew, FileAccess.ReadWrite))
             {

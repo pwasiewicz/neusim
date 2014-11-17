@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuSim", "NeuSim\NeuSim.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuSim.AI", "NeuSim.AI\NeuSim.AI.csproj", "{E0FD5728-E21D-40AB-B82D-3B38D5863E9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuSim.Eval", "NeuSim.Eval\NeuSim.Eval.csproj", "{62559DBB-2DDB-4BA2-8209-AD53442D4ADA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E0FD5728-E21D-40AB-B82D-3B38D5863E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0FD5728-E21D-40AB-B82D-3B38D5863E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0FD5728-E21D-40AB-B82D-3B38D5863E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62559DBB-2DDB-4BA2-8209-AD53442D4ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62559DBB-2DDB-4BA2-8209-AD53442D4ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62559DBB-2DDB-4BA2-8209-AD53442D4ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62559DBB-2DDB-4BA2-8209-AD53442D4ADA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
