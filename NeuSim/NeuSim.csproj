@@ -69,6 +69,10 @@
       <Project>{E0FD5728-E21D-40AB-B82D-3B38D5863E9A}</Project>
       <Name>NeuSim.AI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NeuSim.Eval\NeuSim.Eval.csproj">
+      <Project>{62559DBB-2DDB-4BA2-8209-AD53442D4ADA}</Project>
+      <Name>NeuSim.Eval</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

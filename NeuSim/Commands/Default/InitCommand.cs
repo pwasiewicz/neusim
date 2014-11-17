@@ -34,7 +34,7 @@
 
             var network = new NeuronNetwork(command.Inputs, command.HiddenInputs, NeuronNetworkContext.BuildDefault());
             using (
-                var stream = new FileStream(this.SessionContext.NetworkPath, FileMode.CreateNew, FileAccess.ReadWrite))
+                var stream = new FileStream(this.SessionContext.NeuronNetworkPath, FileMode.CreateNew, FileAccess.ReadWrite))
             {
                 NeuronNetwork.Save(network, stream);
             }

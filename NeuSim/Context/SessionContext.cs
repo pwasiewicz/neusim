@@ -3,6 +3,8 @@
     using System;
     using System.IO;
     using NeuSim.AI;
+    using NeuSim.Arguments;
+    using NeuSim.Eval;
     using NeuSim.Extensions;
 
     internal class SessionContext
@@ -12,6 +14,10 @@
         private readonly TextWriter defaultWriter;
 
         private NeuronNetworkContext networkContext;
+
+        private NeuronNetwork neuronNetwork;
+
+        private ConfigSubOptions contextConfigOptions;
 
         public SessionContext(TextWriter defaultWriter)
         {
@@ -31,7 +37,7 @@
             get { return Path.Combine(this.WorkingPath, NaiConfigDirectory); }
         }
 
-        public string NetworkPath
+        public string NeuronNetworkPath
         {
             get { return Path.Combine(this.ContextDirectory, "network"); }
         }
@@ -43,7 +49,26 @@
 
         public bool IsInitialized
         {
-            get { return Directory.Exists(this.ContextDirectory) && File.Exists(this.NetworkPath); }
+            get { return Directory.Exists(this.ContextDirectory) && File.Exists(this.NeuronNetworkPath); }
+        }
+
+        public ConfigSubOptions ContextConfig
+        {
+            get
+            {
+                if (this.contextConfigOptions != null)
+                {
+                    return this.contextConfigOptions;
+                }
+
+                if (!File.Exists(this.NeuronContextConfigPath))
+                {
+                    return null;
+                }
+
+                this.contextConfigOptions = this.NeuronContextConfigPath.DeserializeFromPath<ConfigSubOptions>();
+                return this.contextConfigOptions;
+            }
         }
 
         public NeuronNetworkContext NetworkContext
@@ -55,12 +80,40 @@
                     return null;
                 }
 
-                //this.networkContext = !File.Exists(this.NeuronContextConfigPath)
-                //                          ? NeuronNetworkContext.BuildDefault()
-                //                          : NeuronNetworkContext.BuildDefault();
+                var configOptions = this.ContextConfig;
+                if (configOptions == null)
+                {
+                    this.networkContext = NeuronNetworkContext.BuildDefault();
+                }
+                else
+                {
+                    this.networkContext = new NeuronNetworkContext
+                                          {
+                                              Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
+                                              Derivative = x => x * (x -1)
+                                          };
+                }
 
                 this.networkContext = NeuronNetworkContext.BuildDefault();
                 return this.networkContext;
+            }
+        }
+
+        public NeuronNetwork NeuronNetwork
+        {
+            get
+            {
+                if (this.neuronNetwork != null)
+                {
+                    return this.neuronNetwork;
+                }
+
+                using (var file = new FileStream(this.NeuronNetworkPath, FileMode.Open, FileAccess.Read))
+                {
+                    this.neuronNetwork = NeuronNetwork.Load(file, this.NetworkContext);
+                }
+
+                return this.neuronNetwork;
             }
         }
     }
