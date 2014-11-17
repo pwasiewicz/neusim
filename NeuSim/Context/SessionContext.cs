@@ -27,9 +27,14 @@
             get { return Path.Combine(this.WorkingPath, NaiConfigDirectory); }
         }
 
+        public string NetworkPath
+        {
+            get { return Path.Combine(this.ContextDirectory, "network"); }
+        }
+
         public bool IsInitialized
         {
-            get { return Directory.Exists(this.ContextDirectory); }
+            get { return Directory.Exists(this.ContextDirectory) && File.Exists(this.NetworkPath); }
         }
     }
 }

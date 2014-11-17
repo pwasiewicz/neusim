@@ -28,6 +28,11 @@
     }
 
     internal class InitSubOptions
-    {        
+    {
+        [Option('i', "inputs", HelpText = "Number of inputs of network.", Required = true)]
+        public int Inputs { get; set; }
+
+        [Option('h', "hidden", HelpText = "Number of hiden neurons in hidden layer.", Required = true)]
+        public int HiddenInputs { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace NeuSim.Commands.Default
 {
+    using NeuSim.AI;
     using NeuSim.Arguments;
     using NeuSim.Context;
     using System.IO;
@@ -30,6 +31,13 @@
 
             var dirInfo = Directory.CreateDirectory(this.SessionContext.ContextDirectory);
             dirInfo.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+
+            var network = new NeuronNetwork(command.Inputs, command.HiddenInputs, null);
+            using (
+                var stream = new FileStream(this.SessionContext.NetworkPath, FileMode.CreateNew, FileAccess.ReadWrite))
+            {
+                NeuronNetwork.Save(network, stream);
+            }
 
             return true;
         }
