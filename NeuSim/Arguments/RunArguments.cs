@@ -1,5 +1,6 @@
 ﻿namespace NeuSim.Arguments
 {
+    using System.IO;
     using CommandLine;
 
     internal class RunArguments
@@ -27,6 +28,23 @@
 
         [Option('d', "DerviativeActivationFunction", HelpText = "Sets derivative of activation function for neurons.")]
         public string DerivativeActivationFunc { get; set; }
+
+        public bool IsDefined(TextWriter errorWriter)
+        {
+            if (string.IsNullOrWhiteSpace(this.ActivationFunc))
+            {
+                errorWriter.WriteLine("Config: activation is not specified.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(this.DerivativeActivationFunc))
+            {
+                errorWriter.WriteLine("Config: derivative of activation function is not specified.");
+                return false;
+            }
+
+            return true;
+        }
     }
 
     internal class DestroySubOptions

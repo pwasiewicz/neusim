@@ -87,11 +87,21 @@
                 }
                 else
                 {
-                    this.networkContext = new NeuronNetworkContext
-                                          {
-                                              Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
-                                              Derivative = Evaluator.ToDelegate(configOptions.DerivativeActivationFunc)
-                                          };
+                    if (!this.ContextConfig.IsDefined(this.Output))
+                    {
+                        this.Output.WriteLine("Using default context settings");
+                        this.networkContext = NeuronNetworkContext.BuildDefault();
+
+                    }
+                    else
+                    {
+                        this.networkContext = new NeuronNetworkContext
+                                              {
+                                                  Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
+                                                  Derivative =
+                                                      Evaluator.ToDelegate(configOptions.DerivativeActivationFunc)
+                                              };
+                    }
                 }
 
                 this.networkContext = NeuronNetworkContext.BuildDefault();
