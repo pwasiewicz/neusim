@@ -62,7 +62,10 @@
 
     public class SimulateSubOptions
     {
-        [Option('f', "file", HelpText = "Input file for input data.")]
-        public string File { get; set; }
+        [Option('f', "files", HelpText = "Input file for input data.", MutuallyExclusiveSet = "input")]
+        public string[] Files { get; set; }
+
+        [Option('i', "input", HelpText = "Input data for inputs space separated.", MutuallyExclusiveSet = "input")]
+        public double[] Input { get; set; }
     }
 }

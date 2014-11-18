@@ -1,11 +1,11 @@
 ﻿namespace NeuSim.Context
 {
-    using System;
-    using System.IO;
     using NeuSim.AI;
     using NeuSim.Arguments;
     using NeuSim.Eval;
     using NeuSim.Extensions;
+    using System;
+    using System.IO;
 
     internal class SessionContext
     {
@@ -125,6 +125,11 @@
 
                 return this.neuronNetwork;
             }
+        }
+
+        public string RelativeToAbsolute(string relative)
+        {
+            return Path.Combine(this.WorkingPath, relative);
         }
     }
 }
