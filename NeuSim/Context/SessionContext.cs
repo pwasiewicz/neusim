@@ -90,7 +90,7 @@
                     this.networkContext = new NeuronNetworkContext
                                           {
                                               Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
-                                              Derivative = x => x * (x -1)
+                                              Derivative = Evaluator.ToDelegate(configOptions.DerivativeActivationFunc)
                                           };
                 }
 

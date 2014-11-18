@@ -15,12 +15,18 @@
 
         [VerbOption("destroy", HelpText = "Destroys session inside current directory.")]
         public DestroySubOptions DestroyVerb { get; set; }
+
+        [VerbOption("simulate", HelpText = "Simulates the specified data via network.")]
+        public SimulateSubOptions SimulateVerb { get; set; }
     }
 
     internal class ConfigSubOptions
     {
         [Option('a', "ActivationFunction", HelpText = "Sets activation function for neurons.")]
         public string ActivationFunc { get; set; }
+
+        [Option('d', "DerviativeActivationFunction", HelpText = "Sets derivative of activation function for neurons.")]
+        public string DerivativeActivationFunc { get; set; }
     }
 
     internal class DestroySubOptions
@@ -34,5 +40,11 @@
 
         [Option('h', "hidden", HelpText = "Number of hiden neurons in hidden layer.", Required = true)]
         public int HiddenInputs { get; set; }
+    }
+
+    public class SimulateSubOptions
+    {
+        [Option('f', "file", HelpText = "Input file for input data.")]
+        public string File { get; set; }
     }
 }

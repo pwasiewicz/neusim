@@ -54,6 +54,7 @@
     <Compile Include="Commands\Default\ConfigCommand.cs" />
     <Compile Include="Commands\Default\DestroyCommand.cs" />
     <Compile Include="Commands\Default\InitCommand.cs" />
+    <Compile Include="Commands\Default\SimulateCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Context\SessionContext.cs" />
     <Compile Include="Extensions\PathStringExtensions.cs" />
