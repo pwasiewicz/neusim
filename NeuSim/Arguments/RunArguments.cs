@@ -66,11 +66,17 @@
 
     public class SimulateSubOptions
     {
-        [Option('f', "files", HelpText = "Input file for input data.", MutuallyExclusiveSet = "input")]
+        [OptionArray('f', "files", HelpText = "Input file for input data.", MutuallyExclusiveSet = "input")]
         public string[] Files { get; set; }
 
         [OptionArray('i', "input", HelpText = "Input data for inputs space separated.", MutuallyExclusiveSet = "input")]
         public double[] Input { get; set; }
+
+        [Option("aggregate", HelpText = "Applies custom aggregate function to results.", DefaultValue = false)]
+        public bool AgreggateResult { get; set; }
+
+        [Option("skiptransform", HelpText = "Skips transform if needed.", DefaultValue = false)]
+        public bool IgnoreTransform { get; set; }
 
         [ParserState]
         public IParserState LastParserState { get; set; }

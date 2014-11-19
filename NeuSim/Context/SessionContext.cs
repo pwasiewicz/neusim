@@ -21,7 +21,11 @@
 
         private string resultParser;
 
+        private string resultAggregator;
+
         private bool resultParsesLoaded;
+
+        private bool resultAggregatorLoaded;
 
         public SessionContext(TextWriter defaultWriter)
         {
@@ -136,27 +140,39 @@
             return Path.Combine(this.WorkingPath, relative);
         }
 
+        public string AggregateResults(double[] results)
+        {
+            this.EnsureParsers();
+
+            return Evaluator.JsAggregate(results, this.resultParser);
+        }
+
         public string TransformResult(double result)
         {
-            // TODO cache
-            var config = this.ContextConfig;
+            this.EnsureParsers();
 
-            if (!this.resultParsesLoaded)
+            return Evaluator.JsEval(result, this.resultParser);
+        }
+
+        private void EnsureParsers()
+        {
+            if (this.resultParsesLoaded)
             {
-                if (!string.IsNullOrWhiteSpace(config.ResultParserFile))
-                {
-                    var fullPath = this.RelativeToAbsolute(config.ResultParserFile);
-                    if (File.Exists(fullPath))
-                    {
-                        this.resultParser = File.ReadAllText(fullPath);
-                    }
-                }
-
-                this.resultParsesLoaded = true;
+                return;
             }
 
-            var parserScript = this.resultParser;
-            return Evaluator.JsEval(result, parserScript);
+            var config = this.ContextConfig;
+
+            if (!string.IsNullOrWhiteSpace(config.ResultParserFile))
+            {
+                var fullPath = this.RelativeToAbsolute(config.ResultParserFile);
+                if (File.Exists(fullPath))
+                {
+                    this.resultParser = File.ReadAllText(fullPath);
+                }
+            }
+
+            this.resultParsesLoaded = true;
         }
     }
 }

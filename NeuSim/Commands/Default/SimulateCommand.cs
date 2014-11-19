@@ -26,39 +26,137 @@
 
         public override bool Run(SimulateSubOptions options)
         {
-            var inputs = new List<Tuple<double[], string>>();
-
-            if (options.Files != null && options.Files.Any())
+            if (options.Files != null)
             {
-                inputs.AddRange(
-                    options.Files.Select(
-                        file =>
-                        new Tuple<double[], string>(
-                            this.SessionContext.RelativeToAbsolute(file).DeserializeFromPath<double[]>(), file)));
+                return this.RunFiles(options);
             }
 
-            if (options.Input != null)
+            return this.RunSingleInput(options);
+
+            //var inputs = new List<Tuple<double[], string>>();
+
+            //if (options.Files != null && options.Files.Any())
+            //{
+            //    inputs.AddRange(
+            //        options.Files.Select(
+            //            file =>
+            //            new Tuple<double[], string>(
+            //                this.SessionContext.RelativeToAbsolute(file).DeserializeFromPath<double[]>(), file)));
+            //}
+
+            //if (options.Input != null)
+            //{
+            //    inputs.Add(new Tuple<double[], string>(options.Input.ToArray(), null));
+            //}
+
+            //var resultsToAggregate = new List<double>();
+
+            //foreach (var input in inputs)
+            //{
+            //    var inputArr = input.Item1;
+            //    var file = input.Item2;
+
+            //    var result = this.SessionContext.NeuronNetwork.Process(inputArr);
+            //    resultsToAggregate.Add(result);
+
+            //    if (!options.AgreggateResult)
+            //    {
+            //        var resultTransformed = this.SessionContext.TransformResult(result);
+
+            //        if (file == null)
+            //        {
+            //            this.PrintOutput(inputArr, resultTransformed);
+            //        }
+            //    }
+            //}
+
+            //if (options.AgreggateResult)
+            //{
+            //    var aggregated = this.SessionContext.AggregateResults(resultsToAggregate.ToArray());
+            //}
+
+            //return true;
+        }
+
+        private bool RunSingleInput(SimulateSubOptions options)
+        {
+            var input = options.Input;
+            if (input == null)
             {
-                inputs.Add(new Tuple<double[], string>(options.Input.ToArray(), null));
+                throw new InvalidOperationException();
             }
 
-            foreach (var input in inputs)
+            if (!input.Any())
             {
-                var inputArr = input.Item1;
-                var file = input.Item2;
-                
-                var result = this.SessionContext.NeuronNetwork.Process(inputArr);
-                var resultTransformed = this.SessionContext.TransformResult(result);
-                if (file == null)
-                {
-                    this.PrintOutput(inputArr, resultTransformed);
-                }
+                this.PrintOutput(input, "0.0");
             }
+
+            var network = this.SessionContext.NeuronNetwork;
+            var result = network.Process(input);
+
+            if (options.IgnoreTransform)
+            {
+                this.PrintOutput(input, result);
+                return true;
+            }
+
+            if (options.AgreggateResult)
+            {
+                var aggregated = this.SessionContext.AggregateResults(new[] {result});
+                this.PrintOutput(input, aggregated);
+                return true;
+            }
+
+            var transformed = this.SessionContext.TransformResult(result);
+            this.PrintOutput(input, transformed);
 
             return true;
         }
 
-        private void WriteToFile(IEnumerable<double> input, double output, string inputFile)
+        private bool RunFiles(SimulateSubOptions options)
+        {
+            var files = options.Files;
+
+            var results = new List<double>();
+
+            foreach (var file in files)
+            {
+                var filePath = this.SessionContext.RelativeToAbsolute(file);
+                if (!File.Exists(file))
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var input = filePath.DeserializeFromPath<double[]>();
+                var output = this.SessionContext.NeuronNetwork.Process(input);
+
+                if (options.IgnoreTransform)
+                {
+                    this.WriteToFile(input, output, file);
+                }
+
+                if (options.AgreggateResult)
+                {
+                    results.Add(output);
+                }
+                else
+                {
+                    var transformed = this.SessionContext.TransformResult(output);
+                    this.WriteToFile(input, transformed, file);
+                }
+            }
+
+            if (!options.IgnoreTransform && options.AgreggateResult)
+            {
+                var aggregated = this.SessionContext.AggregateResults(results.ToArray());
+                this.PrintOutput(new double[0], aggregated);
+            }
+
+            return true;
+
+        }
+
+        private void WriteToFile(IEnumerable<double> input, string output, string inputFile)
         {
             var fullFile = this.SessionContext.RelativeToAbsolute(inputFile);
             fullFile = Path.GetFileNameWithoutExtension(fullFile) + ".out";
@@ -69,12 +167,22 @@
                 return;
             }
 
-            File.WriteAllText(fullFile, output.ToString("R"));
+            File.WriteAllText(fullFile, output);
         }
 
-        private void PrintOutput(IEnumerable<double> input, string output)
+        private void WriteToFile(IEnumerable<double> input, double output, string inputFile)
         {
-            this.SessionContext.Output.WriteLine("\t{0}: {1}", string.Join(" ", input), output);
+            this.WriteToFile(input, output.ToString("R"), inputFile);
+        }
+
+        private void PrintOutput(IEnumerable<double> inputCase, double output)
+        {
+            this.PrintOutput(inputCase, output.ToString("R"));
+        }
+
+        private void PrintOutput(IEnumerable<double> inputCase, string output)
+        {
+            this.SessionContext.Output.WriteLine("\t{0}: {1}", string.Join(" ", inputCase), output);
         }
     }
 }
