@@ -1,5 +1,6 @@
 ﻿namespace NeuSim.Arguments
 {
+    using System.Collections.Generic;
     using System.IO;
     using CommandLine;
 
@@ -23,11 +24,14 @@
 
     internal class ConfigSubOptions
     {
-        [Option('a', "ActivationFunction", HelpText = "Sets activation function for neurons.")]
+        [Option('a', "activation", HelpText = "Sets activation function for neurons.")]
         public string ActivationFunc { get; set; }
 
-        [Option('d', "DerviativeActivationFunction", HelpText = "Sets derivative of activation function for neurons.")]
+        [Option('d', "derviative", HelpText = "Sets derivative of activation function for neurons.")]
         public string DerivativeActivationFunc { get; set; }
+
+        [Option('p', "parser", HelpText = "Sets the script that will be applied to result network.")]
+        public string ResultParserFile { get; set; }
 
         public bool IsDefined(TextWriter errorWriter)
         {
@@ -65,7 +69,10 @@
         [Option('f', "files", HelpText = "Input file for input data.", MutuallyExclusiveSet = "input")]
         public string[] Files { get; set; }
 
-        [Option('i', "input", HelpText = "Input data for inputs space separated.", MutuallyExclusiveSet = "input")]
+        [OptionArray('i', "input", HelpText = "Input data for inputs space separated.", MutuallyExclusiveSet = "input")]
         public double[] Input { get; set; }
+
+        [ParserState]
+        public IParserState LastParserState { get; set; }
     }
 }

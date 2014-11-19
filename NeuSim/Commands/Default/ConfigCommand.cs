@@ -34,6 +34,11 @@
                 currentOptions.DerivativeActivationFunc = options.DerivativeActivationFunc;
             }
 
+            if (options.ResultParserFile != null)
+            {
+                currentOptions.ResultParserFile = options.ResultParserFile;
+            }
+
             this.SessionContext.NeuronContextConfigPath.SerializeToPath(currentOptions);
 
             return true;

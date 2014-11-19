@@ -19,6 +19,10 @@
 
         private ConfigSubOptions contextConfigOptions;
 
+        private string resultParser;
+
+        private bool resultParsesLoaded;
+
         public SessionContext(TextWriter defaultWriter)
         {
             this.defaultWriter = defaultWriter;
@@ -130,6 +134,29 @@
         public string RelativeToAbsolute(string relative)
         {
             return Path.Combine(this.WorkingPath, relative);
+        }
+
+        public string TransformResult(double result)
+        {
+            // TODO cache
+            var config = this.ContextConfig;
+
+            if (!this.resultParsesLoaded)
+            {
+                if (!string.IsNullOrWhiteSpace(config.ResultParserFile))
+                {
+                    var fullPath = this.RelativeToAbsolute(config.ResultParserFile);
+                    if (File.Exists(fullPath))
+                    {
+                        this.resultParser = File.ReadAllText(fullPath);
+                    }
+                }
+
+                this.resultParsesLoaded = true;
+            }
+
+            var parserScript = this.resultParser;
+            return Evaluator.JsEval(result, parserScript);
         }
     }
 }

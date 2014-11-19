@@ -27,6 +27,7 @@
                 invokerVerbOptions = verbOptions;
             }))
             {
+                
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
