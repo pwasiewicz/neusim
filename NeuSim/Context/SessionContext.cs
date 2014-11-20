@@ -1,10 +1,12 @@
 ﻿namespace NeuSim.Context
 {
-    using NeuSim.AI;
-    using NeuSim.Arguments;
-    using NeuSim.Eval;
-    using NeuSim.Extensions;
+    using AI;
+    using Arguments;
+    using Eval;
+    using Exceptions.Default;
+    using Extensions;
     using System;
+    using System.Diagnostics;
     using System.IO;
 
     internal class SessionContext
@@ -21,11 +23,7 @@
 
         private string resultParser;
 
-        private string resultAggregator;
-
         private bool resultParsesLoaded;
-
-        private bool resultAggregatorLoaded;
 
         public SessionContext(TextWriter defaultWriter)
         {
@@ -52,7 +50,7 @@
 
         public string NeuronContextConfigPath
         {
-            get { return Path.Combine(this.ContextDirectory, "context"); }
+            get { return Path.Combine(this.ContextDirectory, "Context"); }
         }
 
         public bool IsInitialized
@@ -71,7 +69,7 @@
 
                 if (!File.Exists(this.NeuronContextConfigPath))
                 {
-                    return null;
+                    throw new InvalidOperationException("Missing config file");
                 }
 
                 this.contextConfigOptions = this.NeuronContextConfigPath.DeserializeFromPath<ConfigSubOptions>();
@@ -89,30 +87,23 @@
                 }
 
                 var configOptions = this.ContextConfig;
-                if (configOptions == null)
+                if (!configOptions.IsDefined(this.Output))
                 {
-                    this.networkContext = NeuronNetworkContext.BuildDefault();
-                }
-                else
-                {
-                    if (!this.ContextConfig.IsDefined(this.Output))
-                    {
-                        this.Output.WriteLine("Using default context settings");
-                        this.networkContext = NeuronNetworkContext.BuildDefault();
+                    this.Output.WriteLine("Missing some settings, using default context.");
+                    configOptions = ConfigSubOptions.Default();
 
-                    }
-                    else
-                    {
-                        this.networkContext = new NeuronNetworkContext
-                                              {
-                                                  Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
-                                                  Derivative =
-                                                      Evaluator.ToDelegate(configOptions.DerivativeActivationFunc)
-                                              };
-                    }
                 }
 
-                this.networkContext = NeuronNetworkContext.BuildDefault();
+                Debug.Assert(configOptions.LearnEpoch != null, "configOptions.LearnEpoch != null");
+
+                this.networkContext = new NeuronNetworkContext
+                                      {
+                                          Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
+                                          Derivative =
+                                              Evaluator.ToDelegate(configOptions.DerivativeActivationFunc),
+                                          LearnEpoch = configOptions.LearnEpoch.Value
+                                      };
+
                 return this.networkContext;
             }
         }
@@ -144,14 +135,28 @@
         {
             this.EnsureParsers();
 
-            return Evaluator.JsAggregate(results, this.resultParser);
+            try
+            {
+                return Evaluator.JsAggregate(results, this.resultParser);
+            }
+            catch (Exception ex)
+            {
+                throw new ExternalScriptException(this, ex);
+            }
         }
 
         public string TransformResult(double result)
         {
             this.EnsureParsers();
 
-            return Evaluator.JsEval(result, this.resultParser);
+            try
+            {
+                return Evaluator.JsEval(result, this.resultParser);
+            }
+            catch (Exception ex)
+            {
+                throw new ExternalScriptException(this, ex);
+            }
         }
 
         private void EnsureParsers()
@@ -165,10 +170,20 @@
 
             if (!string.IsNullOrWhiteSpace(config.ResultParserFile))
             {
-                var fullPath = this.RelativeToAbsolute(config.ResultParserFile);
-                if (File.Exists(fullPath))
+                var fullPath = config.ResultParserFile;
+
+                try
                 {
-                    this.resultParser = File.ReadAllText(fullPath);
+                    fullPath = this.RelativeToAbsolute(config.ResultParserFile);
+
+                    if (File.Exists(fullPath))
+                    {
+                        this.resultParser = File.ReadAllText(fullPath);
+                    }
+                }
+                catch (IOException ex)
+                {
+                    throw new FileAccessException(this, ex, fullPath);
                 }
             }
 

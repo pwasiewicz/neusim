@@ -1,13 +1,12 @@
 ﻿namespace NeuSim.Arguments
 {
-    using System.Collections.Generic;
     using System.IO;
     using CommandLine;
 
     internal class RunArguments
     {
         /// <summary>
-        /// Gets or sets the context.
+        /// Gets or sets the Context.
         /// </summary>
         [VerbOption("init", HelpText = "Inits new simulator session inside current directory.")]
         public InitSubOptions InitVerb { get; set; }
@@ -33,6 +32,9 @@
         [Option('p', "parser", HelpText = "Sets the script that will be applied to result network.")]
         public string ResultParserFile { get; set; }
 
+        [Option('e', "epoch", HelpText = "Sets the number of epoch used in learn properties.")]
+        public int? LearnEpoch { get; set; }
+
         public bool IsDefined(TextWriter errorWriter)
         {
             if (string.IsNullOrWhiteSpace(this.ActivationFunc))
@@ -41,13 +43,29 @@
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(this.DerivativeActivationFunc))
+            if (this.LearnEpoch == null)
             {
-                errorWriter.WriteLine("Config: derivative of activation function is not specified.");
                 return false;
             }
 
-            return true;
+            if (!string.IsNullOrWhiteSpace(this.DerivativeActivationFunc))
+            {
+                return true;
+            }
+
+            errorWriter.WriteLine("Config: derivative of activation function is not specified.");
+            return false;
+        }
+
+        public static ConfigSubOptions Default()
+        {
+            return new ConfigSubOptions
+                   {
+                       ActivationFunc = "1.0 / (1.0 + Exp(-x))",
+                       DerivativeActivationFunc = "x * (x - 1)",
+                       LearnEpoch = 10000,
+                       ResultParserFile = null
+                   };
         }
     }
 
@@ -57,7 +75,7 @@
 
     internal class InitSubOptions
     {
-        [Option('i', "inputs", HelpText = "Number of inputs of network.", Required = true)]
+        [Option('i', "input", HelpText = "Number of input lnegth of network.", Required = true)]
         public int Inputs { get; set; }
 
         [Option('h', "hidden", HelpText = "Number of hiden neurons in hidden layer.", Required = true)]

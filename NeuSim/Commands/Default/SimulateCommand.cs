@@ -1,8 +1,10 @@
 ﻿namespace NeuSim.Commands.Default
 {
-    using NeuSim.Arguments;
-    using NeuSim.Context;
-    using NeuSim.Extensions;
+    using Arguments;
+    using Context;
+    using Exceptions;
+    using Exceptions.Default;
+    using Extensions;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -10,7 +12,8 @@
 
     internal class SimulateCommand : CommandBase<SimulateSubOptions>
     {
-        public SimulateCommand(SessionContext sessionContext) : base(sessionContext)
+        public SimulateCommand(SessionContext sessionContext)
+            : base(sessionContext)
         {
         }
 
@@ -24,61 +27,18 @@
             get { return false; }
         }
 
-        public override bool Run(SimulateSubOptions options)
+        public override void Run(SimulateSubOptions options)
         {
             if (options.Files != null)
             {
-                return this.RunFiles(options);
+                this.RunFiles(options);
+                return;
             }
 
-            return this.RunSingleInput(options);
-
-            //var inputs = new List<Tuple<double[], string>>();
-
-            //if (options.Files != null && options.Files.Any())
-            //{
-            //    inputs.AddRange(
-            //        options.Files.Select(
-            //            file =>
-            //            new Tuple<double[], string>(
-            //                this.SessionContext.RelativeToAbsolute(file).DeserializeFromPath<double[]>(), file)));
-            //}
-
-            //if (options.Input != null)
-            //{
-            //    inputs.Add(new Tuple<double[], string>(options.Input.ToArray(), null));
-            //}
-
-            //var resultsToAggregate = new List<double>();
-
-            //foreach (var input in inputs)
-            //{
-            //    var inputArr = input.Item1;
-            //    var file = input.Item2;
-
-            //    var result = this.SessionContext.NeuronNetwork.Process(inputArr);
-            //    resultsToAggregate.Add(result);
-
-            //    if (!options.AgreggateResult)
-            //    {
-            //        var resultTransformed = this.SessionContext.TransformResult(result);
-
-            //        if (file == null)
-            //        {
-            //            this.PrintOutput(inputArr, resultTransformed);
-            //        }
-            //    }
-            //}
-
-            //if (options.AgreggateResult)
-            //{
-            //    var aggregated = this.SessionContext.AggregateResults(resultsToAggregate.ToArray());
-            //}
-
-            //return true;
+            this.RunSingleInput(options);
         }
 
-        private bool RunSingleInput(SimulateSubOptions options)
+        private void RunSingleInput(SimulateSubOptions options)
         {
             var input = options.Input;
             if (input == null)
@@ -88,32 +48,46 @@
 
             if (!input.Any())
             {
-                this.PrintOutput(input, "0.0");
+                this.SessionContext.Output.WriteLine("There is no input valies.");
+                return;
             }
 
             var network = this.SessionContext.NeuronNetwork;
-            var result = network.Process(input);
+            if (input.Length != network.InputNo)
+            {
+                throw new InvalidInputException(this.SessionContext, input.Length);
+            }
+
+            double result;
+
+            try
+            {
+                result = network.Process(input);
+            }
+            catch (Exception ex)
+            {
+                throw new InternalProcessException(this.SessionContext, ex);
+            }
 
             if (options.IgnoreTransform)
             {
                 this.PrintOutput(input, result);
-                return true;
+                return;
             }
 
             if (options.AgreggateResult)
             {
-                var aggregated = this.SessionContext.AggregateResults(new[] {result});
+
+                var aggregated = this.SessionContext.AggregateResults(new[] { result });
                 this.PrintOutput(input, aggregated);
-                return true;
+                return;
             }
 
             var transformed = this.SessionContext.TransformResult(result);
             this.PrintOutput(input, transformed);
-
-            return true;
         }
 
-        private bool RunFiles(SimulateSubOptions options)
+        private void RunFiles(SimulateSubOptions options)
         {
             var files = options.Files;
 
@@ -124,15 +98,29 @@
                 var filePath = this.SessionContext.RelativeToAbsolute(file);
                 if (!File.Exists(file))
                 {
-                    throw new InvalidOperationException();
+                    throw new FileAccessException(this.SessionContext, null, file);
                 }
 
                 var input = filePath.DeserializeFromPath<double[]>();
-                var output = this.SessionContext.NeuronNetwork.Process(input);
+                if (input.Length != this.SessionContext.NeuronNetwork.InputNo)
+                {
+                    throw new InvalidInputInFileException(this.SessionContext, file, input.Length);
+                }
+
+                double output;
+
+                try
+                {
+                    output = this.SessionContext.NeuronNetwork.Process(input);
+                }
+                catch (Exception ex)
+                {
+                    throw new InternalProcessException(this.SessionContext, ex);
+                }
 
                 if (options.IgnoreTransform)
                 {
-                    this.WriteToFile(input, output, file);
+                    this.WriteToFile(output, file);
                 }
 
                 if (options.AgreggateResult)
@@ -142,21 +130,20 @@
                 else
                 {
                     var transformed = this.SessionContext.TransformResult(output);
-                    this.WriteToFile(input, transformed, file);
+                    this.WriteToFile(transformed, file);
                 }
             }
 
-            if (!options.IgnoreTransform && options.AgreggateResult)
+            if (options.IgnoreTransform || !options.AgreggateResult)
             {
-                var aggregated = this.SessionContext.AggregateResults(results.ToArray());
-                this.PrintOutput(new double[0], aggregated);
+                return;
             }
 
-            return true;
-
+            var aggregated = this.SessionContext.AggregateResults(results.ToArray());
+            this.PrintOutput(new double[0], aggregated);
         }
 
-        private void WriteToFile(IEnumerable<double> input, string output, string inputFile)
+        private void WriteToFile(string output, string inputFile)
         {
             var fullFile = this.SessionContext.RelativeToAbsolute(inputFile);
             fullFile = Path.GetFileNameWithoutExtension(fullFile) + ".out";
@@ -170,9 +157,9 @@
             File.WriteAllText(fullFile, output);
         }
 
-        private void WriteToFile(IEnumerable<double> input, double output, string inputFile)
+        private void WriteToFile(double output, string inputFile)
         {
-            this.WriteToFile(input, output.ToString("R"), inputFile);
+            this.WriteToFile(output.ToString("R"), inputFile);
         }
 
         private void PrintOutput(IEnumerable<double> inputCase, double output)
@@ -183,6 +170,54 @@
         private void PrintOutput(IEnumerable<double> inputCase, string output)
         {
             this.SessionContext.Output.WriteLine("\t{0}: {1}", string.Join(" ", inputCase), output);
+        }
+
+        private class InvalidInputInFileException : SimException
+        {
+            private readonly string file;
+
+            private readonly int inputLength;
+
+            public InvalidInputInFileException(SessionContext context, string file, int inputLength)
+                : base(context)
+            {
+                this.file = file;
+                this.inputLength = inputLength;
+            }
+
+
+            public override void WriteError()
+            {
+                this.Context.Output.WriteLine("The file {0} contains invalid input lnegth. Actual: {1}. Desired: {2}",
+                                              this.file, this.inputLength, this.Context.NeuronNetwork.InputNo);
+            }
+        }
+
+        private class InvalidInputException : SimException
+        {
+            private readonly int inputNo;
+
+            public InvalidInputException(SessionContext context, int inputNo)
+                : base(context)
+            {
+                this.inputNo = inputNo;
+            }
+
+            public override void WriteError()
+            {
+                this.Context.Output.WriteLine("The number of input doesn't match network. Acutal: {0}. Desired: {1}",
+                                              this.inputNo, this.Context.NeuronNetwork.InputNo);
+            }
+        }
+
+        private class InternalProcessException : SimException
+        {
+            public InternalProcessException(SessionContext context, Exception inner) : base(context, inner) { }
+            public override void WriteError()
+            {
+                this.Context.Output.WriteLine("An internal error occured while simulating input data. Message: {0}",
+                                              this.InnerException.Message);
+            }
         }
     }
 }

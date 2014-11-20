@@ -1,12 +1,14 @@
 ﻿namespace NeuSim.Commands.Default
 {
-    using NeuSim.Arguments;
-    using NeuSim.Context;
+    using Arguments;
+    using Context;
+    using Exceptions.Default;
     using System.IO;
 
     internal class DestroyCommand : CommandBase<DestroySubOptions>
     {
-        public DestroyCommand(SessionContext sessionContext) : base(sessionContext)
+        public DestroyCommand(SessionContext sessionContext)
+            : base(sessionContext)
         {
         }
 
@@ -20,12 +22,17 @@
             get { return false; }
         }
 
-        public override bool Run(DestroySubOptions options)
+        public override void Run(DestroySubOptions options)
         {
-            var dirInfo = new DirectoryInfo(this.SessionContext.ContextDirectory);
-            dirInfo.Delete(recursive: true);
-
-            return true;
+            try
+            {
+                var dirInfo = new DirectoryInfo(this.SessionContext.ContextDirectory);
+                dirInfo.Delete(recursive: true);
+            }
+            catch (IOException ex)
+            {
+                throw new FileAccessException(this.SessionContext, ex, this.SessionContext.ContextDirectory);
+            }
         }
     }
 }

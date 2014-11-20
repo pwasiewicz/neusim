@@ -16,7 +16,7 @@
 
         public abstract bool AllowNotInitialized { get; }
 
-        public bool Run(object options)
+        public virtual void Run(object options)
         {
             if (options == null)
             {
@@ -25,14 +25,14 @@
 
             if (this.AllowNotInitialized || this.SessionContext.IsInitialized)
             {
-                return this.Run((TOptions) options);
+                this.Run((TOptions)options);
+                return;
             }
 
             this.SessionContext.Output.WriteLine(
                 "Session is not initialized. Use init command to create new session.");
-            return false;
         }
 
-        public abstract bool Run(TOptions options);
+        public abstract void Run(TOptions options);
     }
 }
