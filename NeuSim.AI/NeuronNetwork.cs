@@ -46,7 +46,10 @@
             this.SetContext(context);
         }
 
-        public int LearnEpoch { get; set; }
+        public int LearnEpoch
+        {
+            get { return this.networkCtx.LearnEpoch; }
+        }
 
         public int InputNo
         {

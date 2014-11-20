@@ -1,6 +1,5 @@
 ﻿namespace NeuSim.Commands.Default
 {
-    using System.Runtime.Serialization;
     using AI;
     using Arguments;
     using Context;
@@ -8,6 +7,8 @@
     using Exceptions.Default;
     using System;
     using System.IO;
+    using System.Runtime.Serialization;
+    using Extensions;
 
     internal class InitCommand : CommandBase<InitSubOptions>
     {
@@ -55,7 +56,7 @@
                 throw new FileAccessException(this.SessionContext, e, this.SessionContext.ContextDirectory);
             }
 
-            var network = new NeuronNetwork(options.Inputs, options.HiddenInputs, NeuronNetworkContext.BuildDefault());
+            var network = new NeuronNetwork(options.Inputs, options.HiddenInputs, context: null);
 
             try
             {
@@ -69,6 +70,15 @@
             catch (SerializationException ex)
             {
                 throw new NetworkSaveInternalException(this.SessionContext, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigWriteException(this.SessionContext, ex);
+            }
+
+            try
+            {
+                this.SessionContext.NeuronContextConfigPath.SerializeToPath(ConfigSubOptions.Default());
             }
             catch (Exception ex)
             {

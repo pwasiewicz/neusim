@@ -6,6 +6,7 @@
     using Exceptions.Default;
     using Extensions;
     using System;
+    using System.Diagnostics;
     using System.IO;
 
     internal class SessionContext
@@ -68,7 +69,7 @@
 
                 if (!File.Exists(this.NeuronContextConfigPath))
                 {
-                    return null;
+                    throw new InvalidOperationException("Missing config file");
                 }
 
                 this.contextConfigOptions = this.NeuronContextConfigPath.DeserializeFromPath<ConfigSubOptions>();
@@ -86,30 +87,23 @@
                 }
 
                 var configOptions = this.ContextConfig;
-                if (configOptions == null)
+                if (!configOptions.IsDefined(this.Output))
                 {
-                    this.networkContext = NeuronNetworkContext.BuildDefault();
-                }
-                else
-                {
-                    if (!this.ContextConfig.IsDefined(this.Output))
-                    {
-                        this.Output.WriteLine("Using default Context settings");
-                        this.networkContext = NeuronNetworkContext.BuildDefault();
+                    this.Output.WriteLine("Missing some settings, using default context.");
+                    configOptions = ConfigSubOptions.Default();
 
-                    }
-                    else
-                    {
-                        this.networkContext = new NeuronNetworkContext
-                                              {
-                                                  Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
-                                                  Derivative =
-                                                      Evaluator.ToDelegate(configOptions.DerivativeActivationFunc)
-                                              };
-                    }
                 }
 
-                this.networkContext = NeuronNetworkContext.BuildDefault();
+                Debug.Assert(configOptions.LearnEpoch != null, "configOptions.LearnEpoch != null");
+
+                this.networkContext = new NeuronNetworkContext
+                                      {
+                                          Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
+                                          Derivative =
+                                              Evaluator.ToDelegate(configOptions.DerivativeActivationFunc),
+                                          LearnEpoch = configOptions.LearnEpoch.Value
+                                      };
+
                 return this.networkContext;
             }
         }

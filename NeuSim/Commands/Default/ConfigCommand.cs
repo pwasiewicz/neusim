@@ -49,6 +49,11 @@
                 currentOptions.ResultParserFile = options.ResultParserFile;
             }
 
+            if (options.LearnEpoch.HasValue)
+            {
+                currentOptions.LearnEpoch = options.LearnEpoch;
+            }
+
             try
             {
                 this.SessionContext.NeuronContextConfigPath.SerializeToPath(currentOptions);
