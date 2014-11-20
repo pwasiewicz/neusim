@@ -50,7 +50,7 @@
 
         public string NeuronContextConfigPath
         {
-            get { return Path.Combine(this.ContextDirectory, "Context"); }
+            get { return Path.Combine(this.ContextDirectory, "context"); }
         }
 
         public bool IsInitialized

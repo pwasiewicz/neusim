@@ -4,35 +4,34 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using NeuSim.Context;
 
     internal class CommandsContext
     {
-        private readonly SessionContext sessionContext;
-        private IDictionary<string, ICommand> commands;
+        private readonly Lazy<IEnumerable<ICommand>> commandsEvaluator;
 
-        public CommandsContext(SessionContext sessionContext)
+        private IDictionary<string, ICommand> commands; 
+
+        public CommandsContext(Lazy<IEnumerable<ICommand>> commandsEvaluator)
         {
-            this.sessionContext = sessionContext;
+            this.commandsEvaluator = commandsEvaluator;
         }
 
-        public void ResolveCommands()
-        {
-            var types =
-                Assembly.GetExecutingAssembly().GetTypes().Where(type => typeof (ICommand).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract);
-
-            this.commands = new Dictionary<string, ICommand>();
-
-            foreach (var type in types)
-            {
-                var instance = (ICommand)Activator.CreateInstance(type, this.sessionContext);
-                this.commands.Add(instance.Name, instance);
-            }
-        }
 
         public void RunCommand(string command, object options)
         {
+            this.ResolveCommands();
+
             this.commands[command].Run(options);
+        }
+
+        private void ResolveCommands()
+        {
+            if (commands != null)
+            {
+                return;
+            }
+
+            this.commands = this.commandsEvaluator.Value.ToDictionary(command => command.Name);
         }
     }
 }

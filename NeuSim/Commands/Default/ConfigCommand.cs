@@ -1,12 +1,12 @@
 ﻿namespace NeuSim.Commands.Default
 {
-    using System.IO;
     using Arguments;
     using Context;
     using Exceptions;
     using Exceptions.Default;
     using Extensions;
     using System;
+    using System.IO;
 
     internal class ConfigCommand : CommandBase<ConfigSubOptions>
     {

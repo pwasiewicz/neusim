@@ -1,11 +1,13 @@
 ﻿namespace NeuSim
 {
     using Arguments;
+    using Autofac;
     using CommandLine;
     using Commands;
     using Context;
     using Exceptions;
     using System;
+    using System.Reflection;
 
     class Program
     {
@@ -32,19 +34,34 @@
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
+            using (var scope = BuildIoC().BeginLifetimeScope())
+            {
+                try
+                {
+                    var commandsContext = scope.Resolve<CommandsContext>();
+                    commandsContext.RunCommand(invokedVerb, invokerVerbOptions);
+                }
+                catch (SimException ex)
+                {
+                    ex.WriteError();
+                }
+            }
+        }
+
+        private static IContainer BuildIoC()
+        {
             var session = new SessionContext(Console.Out);
-            var commandsContext = new CommandsContext(session);
 
-            commandsContext.ResolveCommands();
 
-            try
-            {
-                commandsContext.RunCommand(invokedVerb, invokerVerbOptions);
-            }
-            catch (SimException ex)
-            {
-                ex.WriteError();
-            }
+            var builder = new ContainerBuilder();
+
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                   .Where(type => typeof(ICommand).IsAssignableFrom(type))
+                   .As<ICommand>().InstancePerLifetimeScope();
+            builder.RegisterInstance(session).As<SessionContext>().SingleInstance();
+            builder.RegisterType<CommandsContext>().AsSelf().InstancePerLifetimeScope();
+
+            return builder.Build();
         }
     }
 }
