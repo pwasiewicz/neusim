@@ -1,9 +1,10 @@
 ﻿namespace NeuSim.Context
 {
-    using NeuSim.AI;
-    using NeuSim.Arguments;
-    using NeuSim.Eval;
-    using NeuSim.Extensions;
+    using AI;
+    using Arguments;
+    using Eval;
+    using Exceptions.Default;
+    using Extensions;
     using System;
     using System.IO;
 
@@ -21,11 +22,7 @@
 
         private string resultParser;
 
-        private string resultAggregator;
-
         private bool resultParsesLoaded;
-
-        private bool resultAggregatorLoaded;
 
         public SessionContext(TextWriter defaultWriter)
         {
@@ -52,7 +49,7 @@
 
         public string NeuronContextConfigPath
         {
-            get { return Path.Combine(this.ContextDirectory, "context"); }
+            get { return Path.Combine(this.ContextDirectory, "Context"); }
         }
 
         public bool IsInitialized
@@ -97,7 +94,7 @@
                 {
                     if (!this.ContextConfig.IsDefined(this.Output))
                     {
-                        this.Output.WriteLine("Using default context settings");
+                        this.Output.WriteLine("Using default Context settings");
                         this.networkContext = NeuronNetworkContext.BuildDefault();
 
                     }
@@ -144,14 +141,28 @@
         {
             this.EnsureParsers();
 
-            return Evaluator.JsAggregate(results, this.resultParser);
+            try
+            {
+                return Evaluator.JsAggregate(results, this.resultParser);
+            }
+            catch (Exception ex)
+            {
+                throw new ExternalScriptException(this, ex);
+            }
         }
 
         public string TransformResult(double result)
         {
             this.EnsureParsers();
 
-            return Evaluator.JsEval(result, this.resultParser);
+            try
+            {
+                return Evaluator.JsEval(result, this.resultParser);
+            }
+            catch (Exception ex)
+            {
+                throw new ExternalScriptException(this, ex);
+            }
         }
 
         private void EnsureParsers()
@@ -165,10 +176,20 @@
 
             if (!string.IsNullOrWhiteSpace(config.ResultParserFile))
             {
-                var fullPath = this.RelativeToAbsolute(config.ResultParserFile);
-                if (File.Exists(fullPath))
+                var fullPath = config.ResultParserFile;
+
+                try
                 {
-                    this.resultParser = File.ReadAllText(fullPath);
+                    fullPath = this.RelativeToAbsolute(config.ResultParserFile);
+
+                    if (File.Exists(fullPath))
+                    {
+                        this.resultParser = File.ReadAllText(fullPath);
+                    }
+                }
+                catch (IOException ex)
+                {
+                    throw new FileAccessException(this, ex, fullPath);
                 }
             }
 

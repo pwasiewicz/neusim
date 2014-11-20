@@ -1,9 +1,10 @@
 ﻿namespace NeuSim
 {
+    using Arguments;
     using CommandLine;
-    using NeuSim.Arguments;
-    using NeuSim.Commands;
-    using NeuSim.Context;
+    using Commands;
+    using Context;
+    using Exceptions;
     using System;
 
     class Program
@@ -27,7 +28,7 @@
                 invokerVerbOptions = verbOptions;
             }))
             {
-                
+
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
@@ -35,7 +36,15 @@
             var commandsContext = new CommandsContext(session);
 
             commandsContext.ResolveCommands();
-            commandsContext.RunCommand(invokedVerb, invokerVerbOptions);
+
+            try
+            {
+                commandsContext.RunCommand(invokedVerb, invokerVerbOptions);
+            }
+            catch (SimException ex)
+            {
+                ex.WriteError();
+            }
         }
     }
 }

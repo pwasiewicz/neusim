@@ -7,7 +7,7 @@
     internal class RunArguments
     {
         /// <summary>
-        /// Gets or sets the context.
+        /// Gets or sets the Context.
         /// </summary>
         [VerbOption("init", HelpText = "Inits new simulator session inside current directory.")]
         public InitSubOptions InitVerb { get; set; }
@@ -57,7 +57,7 @@
 
     internal class InitSubOptions
     {
-        [Option('i', "inputs", HelpText = "Number of inputs of network.", Required = true)]
+        [Option('i', "input", HelpText = "Number of input lnegth of network.", Required = true)]
         public int Inputs { get; set; }
 
         [Option('h', "hidden", HelpText = "Number of hiden neurons in hidden layer.", Required = true)]

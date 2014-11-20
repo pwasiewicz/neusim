@@ -10,7 +10,10 @@
     {
         private const int Version = 1;
 
-        [NonSerialized] private NeuronNetworkContext networkCtx;
+        [NonSerialized]
+        private NeuronNetworkContext networkCtx;
+
+        private readonly int inputsNo;
 
         private readonly int hiddenNeuronsNo;
 
@@ -19,7 +22,18 @@
         private readonly Neuron outputNeuron;
 
         public NeuronNetwork(int inputsNo, int hiddenNeuronsNo, NeuronNetworkContext context)
-        {            
+        {
+            if (inputsNo <= 0)
+            {
+                throw new ArgumentOutOfRangeException("inputsNo", inputsNo, "The value should be greater than 0");
+            }
+
+            if (hiddenNeuronsNo <= 0)
+            {
+                throw new ArgumentOutOfRangeException("hiddenNeuronsNo", inputsNo, "The value should be greater than 0");
+            }
+
+            this.inputsNo = inputsNo;
             this.hiddenNeuronsNo = hiddenNeuronsNo;
             this.hiddenNeurons = new Neuron[hiddenNeuronsNo];
             this.outputNeuron = new Neuron(hiddenNeuronsNo);
@@ -34,6 +48,11 @@
 
         public int LearnEpoch { get; set; }
 
+        public int InputNo
+        {
+            get { return this.inputsNo; }
+        }
+
         public static void Save(NeuronNetwork network, Stream writer)
         {
             var formatter = new BinaryFormatter();
@@ -45,13 +64,13 @@
         public static NeuronNetwork Load(Stream stream, NeuronNetworkContext context)
         {
             var formatter = new BinaryFormatter();
-            var version = (int) formatter.Deserialize(stream);
+            var version = (int)formatter.Deserialize(stream);
             if (version != Version)
             {
                 throw new InvalidOperationException("Invalid version.");
             }
 
-            var network = (NeuronNetwork) formatter.Deserialize(stream);
+            var network = (NeuronNetwork)formatter.Deserialize(stream);
             network.SetContext(context);
 
             return network;
@@ -96,14 +115,14 @@
 
                     var outputNeuronValue = this.outputNeuron.GetOutput();
 
-                    this.outputNeuron.LastError = this.networkCtx.Derivative(outputNeuronValue)*
+                    this.outputNeuron.LastError = this.networkCtx.Derivative(outputNeuronValue) *
                                                   (results[i] - outputNeuronValue);
                     this.outputNeuron.NormalizeWeights();
 
                     for (var j = 0; j < this.hiddenNeuronsNo; j++)
                     {
                         this.hiddenNeurons[j].LastError =
-                            this.networkCtx.Derivative(this.hiddenNeurons[j].GetOutput())*this.outputNeuron.LastError*
+                            this.networkCtx.Derivative(this.hiddenNeurons[j].GetOutput()) * this.outputNeuron.LastError *
                             this.outputNeuron.Weights[j];
 
                         this.hiddenNeurons[j].NormalizeWeights();
