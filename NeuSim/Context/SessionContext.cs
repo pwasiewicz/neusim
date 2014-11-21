@@ -5,9 +5,11 @@
     using Eval;
     using Exceptions.Default;
     using Extensions;
+    using Services;
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
 
     internal class SessionContext
     {
@@ -25,9 +27,12 @@
 
         private bool resultParsesLoaded;
 
-        public SessionContext(TextWriter defaultWriter)
+        private readonly IEvaluatorService evaluatorService;
+
+        public SessionContext(TextWriter defaultWriter, IEvaluatorService evaluatorService)
         {
             this.defaultWriter = defaultWriter;
+            this.evaluatorService = evaluatorService;
             this.WorkingPath = Environment.CurrentDirectory;
         }
 
@@ -134,10 +139,14 @@
         public string AggregateResults(double[] results)
         {
             this.EnsureParsers();
+            if (string.IsNullOrWhiteSpace(this.resultParser))
+            {
+                return results.Average().ToString("R");
+            }
 
             try
             {
-                return Evaluator.JsAggregate(results, this.resultParser);
+                return this.evaluatorService.CallFunction(this.resultParser, "aggregate", results);
             }
             catch (Exception ex)
             {
@@ -148,10 +157,14 @@
         public string TransformResult(double result)
         {
             this.EnsureParsers();
+            if (string.IsNullOrWhiteSpace(this.resultParser))
+            {
+                return result.ToString("R");
+            }
 
             try
             {
-                return Evaluator.JsEval(result, this.resultParser);
+                return this.evaluatorService.CallFunction(this.resultParser, "transform", result);
             }
             catch (Exception ex)
             {

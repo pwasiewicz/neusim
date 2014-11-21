@@ -1,5 +1,6 @@
 ﻿namespace NeuSim
 {
+    using System.Linq;
     using Arguments;
     using Autofac;
     using CommandLine;
@@ -8,8 +9,9 @@
     using Exceptions;
     using System;
     using System.Reflection;
+    using Services.Implementations;
 
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
@@ -30,35 +32,41 @@
                 invokerVerbOptions = verbOptions;
             }))
             {
-
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
             using (var scope = BuildIoC().BeginLifetimeScope())
             {
-                try
-                {
-                    var commandsContext = scope.Resolve<CommandsContext>();
-                    commandsContext.RunCommand(invokedVerb, invokerVerbOptions);
-                }
-                catch (SimException ex)
-                {
-                    ex.WriteError();
-                }
+                BeginNeuSim(scope.Resolve<CommandsContext>(), invokedVerb, invokerVerbOptions);
+            }
+        }
+
+        private static void BeginNeuSim(CommandsContext ctx, string invokedVerb, object invokerVerbOptions)
+        {
+            try
+            {
+                ctx.RunCommand(invokedVerb, invokerVerbOptions);
+            }
+            catch (SimException ex)
+            {
+                ex.WriteError();
             }
         }
 
         private static IContainer BuildIoC()
         {
-            var session = new SessionContext(Console.Out);
-
-
             var builder = new ContainerBuilder();
 
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
                    .Where(type => typeof(ICommand).IsAssignableFrom(type))
                    .As<ICommand>().InstancePerLifetimeScope();
-            builder.RegisterInstance(session).As<SessionContext>().SingleInstance();
+
+            builder.RegisterType<SessionContext>()
+                   .As<SessionContext>()
+                   .WithParameter(new NamedParameter("defaultWriter", Console.Out))
+                   .SingleInstance();
+
+            builder.RegisterType<EvaluatorService>().AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterType<CommandsContext>().AsSelf().InstancePerLifetimeScope();
 
             return builder.Build();

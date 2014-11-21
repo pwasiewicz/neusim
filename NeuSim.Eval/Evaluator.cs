@@ -1,9 +1,7 @@
 ﻿namespace NeuSim.Eval
 {
-    using System.Linq;
     using Jint;
     using Jint.Native;
-    using Jint.Native.Object;
     using NCalc;
     using System;
 
@@ -17,38 +15,28 @@
             return x =>
                    {
                        expressionPreparsed.Parameters["x"] = x;
-                       return (double) expressionPreparsed.Evaluate();
+                       return (double)expressionPreparsed.Evaluate();
                    };
         }
 
-        public static string JsAggregate(double[] outputs, string script)
+        public static string CallFunction(object input, string script, string functionName)
         {
-            if (string.IsNullOrWhiteSpace(script))
+            if (script == null)
             {
-                return outputs.Average().ToString("R");
+                throw new ArgumentNullException("script");
+            }
+
+            if (functionName == null)
+            {
+                throw new ArgumentNullException("functionName");
             }
 
             var jsEngine = new Engine().Execute(script);
-            var function = jsEngine.GetValue("aggregate");
+            var function = jsEngine.GetValue(functionName);
 
-            var result = function.Invoke(new[] {JsValue.FromObject(jsEngine, outputs)});
+            var result = function.Invoke(new[] { JsValue.FromObject(jsEngine, input) });
 
             return result.ToString();
-        }
-
-        public static string JsEval(double value, string script)
-        {
-            if (string.IsNullOrWhiteSpace(script))
-            {
-                return value.ToString("R");
-            }
-
-            var jsEngine = new Engine().Execute(script);
-            var result = jsEngine.GetValue("transform");
-
-            var transformExecuted = result.Invoke(new[] {new JsValue(value)});
-
-            return transformExecuted.ToString();
         }
     }
 }

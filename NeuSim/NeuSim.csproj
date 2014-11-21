@@ -68,6 +68,8 @@
     <Compile Include="Extensions\PathStringExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IEvaluatorService.cs" />
+    <Compile Include="Services\Implementations\EvaluatorService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
