@@ -19,6 +19,9 @@
 
         [VerbOption("simulate", HelpText = "Simulates the specified data via network.")]
         public SimulateSubOptions SimulateVerb { get; set; }
+
+        [VerbOption("learn", HelpText = "Learn the network of with specified data.")]
+        public LearnSubOptions LearnVerb { get; set; }
     }
 
     internal class ConfigSubOptions
@@ -67,6 +70,10 @@
                        ResultParserFile = null
                    };
         }
+    }
+
+    internal class LearnSubOptions
+    {
     }
 
     internal class DestroySubOptions

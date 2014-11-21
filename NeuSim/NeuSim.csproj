@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>applications-education-mathematics.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
@@ -58,6 +61,7 @@
     <Compile Include="Commands\Default\ConfigCommand.cs" />
     <Compile Include="Commands\Default\DestroyCommand.cs" />
     <Compile Include="Commands\Default\InitCommand.cs" />
+    <Compile Include="Commands\Default\LearnCommand.cs" />
     <Compile Include="Commands\Default\SimulateCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Context\SessionContext.cs" />
@@ -84,6 +88,9 @@
       <Project>{62559DBB-2DDB-4BA2-8209-AD53442D4ADA}</Project>
       <Name>NeuSim.Eval</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="applications-education-mathematics.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
