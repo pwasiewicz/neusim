@@ -65,7 +65,7 @@
             return new ConfigSubOptions
                    {
                        ActivationFunc = "1.0 / (1.0 + Exp(-x))",
-                       DerivativeActivationFunc = "x * (x - 1)",
+                       DerivativeActivationFunc = "x * (1 - x)",
                        LearnEpoch = 10000,
                        ResultParserFile = null
                    };
