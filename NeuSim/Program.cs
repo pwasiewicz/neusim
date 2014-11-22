@@ -67,6 +67,8 @@
                    .SingleInstance();
 
             builder.RegisterType<EvaluatorService>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<HashCalculator>().AsImplementedInterfaces().InstancePerLifetimeScope();
+
             builder.RegisterType<CommandsContext>().AsSelf().InstancePerLifetimeScope();
 
             return builder.Build();

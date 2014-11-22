@@ -23,4 +23,11 @@
         {
         }
     }
+
+    public class LearnCase
+    {
+        public double Output { get; set; }
+
+        public double[] Input { get; set; }
+    }
 }

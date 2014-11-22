@@ -74,6 +74,8 @@
 
     internal class LearnSubOptions
     {
+        [OptionArray('p', "path", HelpText = "Learns from files inside specified path.")]
+        public string[] Paths { get; set; }
     }
 
     internal class DestroySubOptions

@@ -73,7 +73,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IEvaluatorService.cs" />
+    <Compile Include="Services\IHashCalculator.cs" />
     <Compile Include="Services\Implementations\EvaluatorService.cs" />
+    <Compile Include="Services\Implementations\HashCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
