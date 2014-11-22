@@ -70,6 +70,7 @@
     <Compile Include="Exceptions\Default\NetworkSaveInternalException.cs" />
     <Compile Include="Exceptions\SimException.cs" />
     <Compile Include="Extensions\PathStringExtensions.cs" />
+    <Compile Include="Helpers\PathMirror.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IEvaluatorService.cs" />

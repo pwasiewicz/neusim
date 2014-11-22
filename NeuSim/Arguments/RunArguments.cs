@@ -74,8 +74,17 @@
 
     internal class LearnSubOptions
     {
-        [OptionArray('p', "path", HelpText = "Learns from files inside specified path.")]
+        [OptionArray('p', "path", HelpText = "Learns from files inside specified path.", MutuallyExclusiveSet = "all")]
         public string[] Paths { get; set; }
+
+        [Option('f', "file", HelpText = "Learns the specified learn case.", MutuallyExclusiveSet = "all")]
+        public string File { get; set; }
+
+        [Option("all", HelpText = "Learns all non-learn cases.", MutuallyExclusiveSet = "all")]
+        public bool All { get; set; }
+
+        [Option("force", HelpText = "Forces to learn cases even it has already been learnt.")]
+        public bool Force { get;set; }
     }
 
     internal class DestroySubOptions
