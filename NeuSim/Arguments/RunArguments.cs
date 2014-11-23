@@ -2,6 +2,7 @@
 {
     using System.IO;
     using CommandLine;
+    using Newtonsoft.Json;
 
     internal class RunArguments
     {
@@ -37,6 +38,14 @@
 
         [Option('e', "epoch", HelpText = "Sets the number of epoch used in learn properties.")]
         public int? LearnEpoch { get; set; }
+
+        [OptionArray("weights", HelpText = "Sets manually weights of inputs.")]
+        [JsonIgnore]
+        public string[] Weights { get; set; }
+
+        [OptionArray("biases", HelpText = "Sets manually baises of inputs.")]
+        [JsonIgnore]
+        public string[] Biases { get; set; }
 
         public bool IsDefined(TextWriter errorWriter)
         {
