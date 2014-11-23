@@ -39,6 +39,9 @@
         [Option('e', "epoch", HelpText = "Sets the number of epoch used in learn properties.")]
         public int? LearnEpoch { get; set; }
 
+        [Option('t', "tolarance", HelpText = "Sets the tolerance of error on output value")]
+        public double? Tolerance { get; set; }
+
         [OptionArray("weights", HelpText = "Sets manually weights of inputs.")]
         [JsonIgnore]
         public string[] Weights { get; set; }
@@ -60,6 +63,11 @@
                 return false;
             }
 
+            if (this.Tolerance == null)
+            {
+                return false;
+            }
+
             if (!string.IsNullOrWhiteSpace(this.DerivativeActivationFunc))
             {
                 return true;
@@ -76,7 +84,8 @@
                        ActivationFunc = "1.0 / (1.0 + Exp(-x))",
                        DerivativeActivationFunc = "x * (1 - x)",
                        LearnEpoch = 10000,
-                       ResultParserFile = null
+                       ResultParserFile = null,
+                       Tolerance = 0.001
                    };
         }
     }

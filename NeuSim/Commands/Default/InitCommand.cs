@@ -56,25 +56,7 @@
                 throw new FileAccessException(this.SessionContext, e, this.SessionContext.ContextDirectory);
             }
 
-            var network = new NeuronNetwork(options.Inputs, options.HiddenInputs, context: null);
-
-            try
-            {
-                using (
-                    var stream = new FileStream(this.SessionContext.NeuronNetworkPath, FileMode.CreateNew,
-                                                FileAccess.ReadWrite))
-                {
-                    NeuronNetwork.Save(network, stream);
-                }
-            }
-            catch (SerializationException ex)
-            {
-                throw new NetworkSaveInternalException(this.SessionContext, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new ConfigWriteException(this.SessionContext, ex);
-            }
+            this.SessionContext.NeuronNetwork = new NeuronNetwork(options.Inputs, options.HiddenInputs, context: null);
 
             try
             {

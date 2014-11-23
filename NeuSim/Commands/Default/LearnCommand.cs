@@ -53,8 +53,8 @@
                                                                                                                               (".learn")),
                                                                                                                      options
                                                                                                                          .Force));
-                return;
             }
+
         }
 
         private void LearnFromInfoStorage(LearnCasesInfoStorage storageFilesInfo, IEnumerable<FileInfo> filesInfo,

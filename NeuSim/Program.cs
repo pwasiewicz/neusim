@@ -58,18 +58,18 @@
             var builder = new ContainerBuilder();
 
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-                   .Where(type => typeof(ICommand).IsAssignableFrom(type))
-                   .As<ICommand>().InstancePerLifetimeScope();
+                   .Where(type => typeof (ICommand).IsAssignableFrom(type))
+                   .As<ICommand>();
 
             builder.RegisterType<SessionContext>()
                    .As<SessionContext>()
                    .WithParameter(new NamedParameter("defaultWriter", Console.Out))
-                   .SingleInstance();
+                   .InstancePerLifetimeScope();
 
-            builder.RegisterType<EvaluatorService>().AsImplementedInterfaces().InstancePerLifetimeScope();
-            builder.RegisterType<HashCalculator>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<EvaluatorService>().AsImplementedInterfaces();
+            builder.RegisterType<HashCalculator>().AsImplementedInterfaces();
 
-            builder.RegisterType<CommandsContext>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<CommandsContext>().AsSelf();
 
             return builder.Build();
         }

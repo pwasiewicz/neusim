@@ -120,6 +120,11 @@
 
                     this.outputNeuron.LastError = this.networkCtx.Derivative(outputNeuronValue) *
                                                   (results[i] - outputNeuronValue);
+                    if (Math.Abs(outputNeuron.LastError) < this.networkCtx.ErrorTolerance)
+                    {
+                        continue;
+                    }
+
                     this.outputNeuron.NormalizeWeights();
 
                     for (var j = 0; j < this.hiddenNeuronsNo; j++)

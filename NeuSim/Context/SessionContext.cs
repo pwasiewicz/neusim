@@ -1,17 +1,20 @@
 ﻿namespace NeuSim.Context
 {
+    using System.Runtime.Serialization;
     using AI;
     using Arguments;
     using Eval;
     using Exceptions.Default;
     using Extensions;
+    using NeuSim.Commands.Default;
+    using NeuSim.Exceptions;
     using Services;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
 
-    internal class SessionContext
+    internal class SessionContext : IDisposable
     {
         private const string NaiConfigDirectory = ".nai";
 
@@ -100,13 +103,15 @@
                 }
 
                 Debug.Assert(configOptions.LearnEpoch != null, "configOptions.LearnEpoch != null");
+                Debug.Assert(configOptions.Tolerance != null, "configOptions.Tolerance != null");
 
                 this.networkContext = new NeuronNetworkContext
                                       {
                                           Function = Evaluator.ToDelegate(configOptions.ActivationFunc),
                                           Derivative =
                                               Evaluator.ToDelegate(configOptions.DerivativeActivationFunc),
-                                          LearnEpoch = configOptions.LearnEpoch.Value
+                                          LearnEpoch = configOptions.LearnEpoch.Value,
+                                          ErrorTolerance = configOptions.Tolerance.Value
                                       };
 
                 return this.networkContext;
@@ -129,6 +134,8 @@
 
                 return this.neuronNetwork;
             }
+
+            internal set { this.neuronNetwork = value; }
         }
 
         public string RelativeToAbsolute(string relative)
@@ -202,5 +209,39 @@
 
             this.resultParsesLoaded = true;
         }
+
+        public void Dispose()
+        {
+            try
+            {
+                if (this.neuronNetwork == null)
+                {
+                    return;
+                }
+
+                using (var networkFile = new FileStream(this.NeuronNetworkPath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    NeuronNetwork.Save(this.NeuronNetwork, networkFile);
+                }
+            }
+            catch (SerializationException ex)
+            {
+                throw new NetworkSaveInternalException(this, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new NetworkWriteException(this, ex);
+            }
+        }
+
+        private class NetworkWriteException : SimException
+        {
+            public NetworkWriteException(SessionContext context, Exception inner) : base(context, inner) { }
+            public override void WriteError()
+            {
+                this.Context.Output.WriteLine(
+                    "Cannot write network state. No sufficient permssion or internal error occured.");
+            }
+        } 
     }
 }

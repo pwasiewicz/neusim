@@ -39,6 +39,11 @@
                 currentOptions.DerivativeActivationFunc = options.DerivativeActivationFunc;
             }
 
+            if (options.Tolerance != null)
+            {
+                currentOptions.Tolerance = options.Tolerance;
+            }
+
             if (options.ResultParserFile != null)
             {
                 if (!File.Exists(this.SessionContext.RelativeToAbsolute(options.ResultParserFile)))
