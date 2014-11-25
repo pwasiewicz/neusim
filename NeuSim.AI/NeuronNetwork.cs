@@ -4,6 +4,7 @@
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization.Formatters.Binary;
+    using Specification;
 
     [Serializable]
     public class NeuronNetwork
@@ -137,6 +138,11 @@
                     }
                 }
             }
+        }
+
+        public INeuronNetworkSpecification Specification()
+        {
+            return null;
         }
 
         internal void SetContext(NeuronNetworkContext context)

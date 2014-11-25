@@ -1,13 +1,13 @@
 ﻿namespace NeuSim.Commands.Default
 {
+    using Arguments;
+    using Context;
+    using Helpers;
+    using Newtonsoft.Json;
+    using Services;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using NeuSim.Arguments;
-    using NeuSim.Context;
-    using NeuSim.Helpers;
-    using NeuSim.Services;
-    using Newtonsoft.Json;
 
     internal class LearnCommand : CommandBase<LearnSubOptions>
     {
@@ -15,7 +15,8 @@
 
         private readonly IHashCalculator hashCalculator;
 
-        public LearnCommand(SessionContext sessionContext, IHashCalculator hashCalculator) : base(sessionContext)
+        public LearnCommand(SessionContext sessionContext, IHashCalculator hashCalculator)
+            : base(sessionContext)
         {
             this.hashCalculator = hashCalculator;
         }
@@ -137,7 +138,7 @@
     public class LearnCasesInfoStorage
     {
 
-        public List<LearnCaseInfoStorage> Files { get; set; } 
+        public List<LearnCaseInfoStorage> Files { get; set; }
     }
 
     public class LearnCaseInfoStorage

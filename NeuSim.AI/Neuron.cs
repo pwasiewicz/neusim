@@ -4,7 +4,7 @@
     using System.Linq;
 
     [Serializable]
-    internal class Neuron 
+    internal class Neuron
     {
         private static readonly Lazy<Random> RandomHolder = new Lazy<Random>(() => new Random());
 
@@ -38,7 +38,7 @@
 
         public double GetOutput()
         {
-            var sum = this.inputs.Select((t, i) => t*this.weights[i]).Sum() + this.bias;
+            var sum = this.inputs.Select((t, i) => t * this.weights[i]).Sum() + this.bias;
             return this.NetworkContext.Function(sum);
         }
 
@@ -61,15 +61,5 @@
 
             this.bias += this.LastError;
         }
-
-        //public static double Activation(double x)
-        //{
-        //    return 1.0 / (1.0 + Math.Exp(-x));
-        //}
-
-        //public static double ActivationDerivative(double x)
-        //{
-        //    return x * (1 - x);
-        //}
     }
 }

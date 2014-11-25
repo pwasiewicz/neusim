@@ -1,8 +1,8 @@
 ﻿namespace NeuSim.Arguments
 {
-    using System.IO;
     using CommandLine;
     using Newtonsoft.Json;
+    using System.IO;
 
     internal class RunArguments
     {
@@ -23,6 +23,9 @@
 
         [VerbOption("learn", HelpText = "Learn the network of with specified data.")]
         public LearnSubOptions LearnVerb { get; set; }
+
+        [VerbOption("display", HelpText = "Displays the neuron network")]
+        public DisplaySubOptions DisplayVerb { get; set; }
     }
 
     internal class ConfigSubOptions
@@ -42,13 +45,25 @@
         [Option('t', "tolarance", HelpText = "Sets the tolerance of error on output value")]
         public double? Tolerance { get; set; }
 
-        [OptionArray("weights", HelpText = "Sets manually weights of inputs.")]
+        [OptionArray('w', "weight", HelpText = "Sets manually weights of inputs.")]
         [JsonIgnore]
-        public string[] Weights { get; set; }
+        public int? Weight { get; set; }
 
-        [OptionArray("biases", HelpText = "Sets manually baises of inputs.")]
+        [OptionArray('b', "bias", HelpText = "Sets manually baises of inputs.")]
         [JsonIgnore]
-        public string[] Biases { get; set; }
+        public int? Bias { get; set; }
+
+        [Option('l', "layer", HelpText = "Sets the context layer for setting weight or bias.")]
+        [JsonIgnore]
+        public int? Layer { get; set; }
+
+        [Option('n', "neuron", HelpText = "Sets the context layer for setting weight or bias.")]
+        [JsonIgnore]
+        public int? Neuron { get; set; }
+
+        [Option('t', "input", HelpText = "Sets the context for input of selected neuroon in \"neuron\" option.")]
+        [JsonIgnore]
+        public int? InputOfNeuron { get; set; }
 
         public bool IsDefined(TextWriter errorWriter)
         {
@@ -102,7 +117,7 @@
         public bool All { get; set; }
 
         [Option("force", HelpText = "Forces to learn cases even it has already been learnt.")]
-        public bool Force { get;set; }
+        public bool Force { get; set; }
     }
 
     internal class DestroySubOptions
@@ -131,8 +146,10 @@
 
         [Option("skiptransform", HelpText = "Skips transform if needed.", DefaultValue = false)]
         public bool IgnoreTransform { get; set; }
+    }
 
-        [ParserState]
-        public IParserState LastParserState { get; set; }
+    public class DisplaySubOptions
+    {
+
     }
 }

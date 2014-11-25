@@ -1,5 +1,6 @@
 ﻿namespace NeuSim.Commands.Default
 {
+    using AI.Specification;
     using Arguments;
     using Context;
     using Exceptions;
@@ -59,6 +60,11 @@
                 currentOptions.LearnEpoch = options.LearnEpoch;
             }
 
+            if (options.Weight != null)
+            {
+                this.SetWeight(options);
+            }
+
             try
             {
                 this.SessionContext.NeuronContextConfigPath.SerializeToPath(currentOptions);
@@ -67,6 +73,66 @@
             {
                 throw new FileAccessException(this.SessionContext, ex, this.SessionContext.NeuronContextConfigPath);
             }
+        }
+
+        private void SetWeight(ConfigSubOptions options)
+        {
+            if (!this.EnsureSpecifedNeuronWithInputSelected(options))
+            {
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        private bool EnsureSpecifedNeuronWithInputSelected(ConfigSubOptions options)
+        {
+            var specificationEvalutor =
+                new Lazy<INeuronNetworkSpecification>(() => this.SessionContext.NeuronNetwork.Specification());
+
+            if (!options.Layer.HasValue)
+            {
+                this.SessionContext.Output.WriteLine("You must specify layer of neuron. Use \"layer\" argument.");
+                return false;
+            }
+
+            var layersNo = specificationEvalutor.Value.LayerNumber;
+            if (options.Layer.IsOutOfRange(1, layersNo + 1))
+            {
+                this.SessionContext.Output.WriteLine("Layer number is out of range. Possibilities: {0} - {1}", 1,
+                                                     layersNo);
+                return false;
+            }
+
+            if (!options.Neuron.HasValue)
+            {
+                this.SessionContext.Output.WriteLine("You must specify neuron in layer. Use \"neuron\" option.");
+                return false;
+            }
+
+            var neuronInLayers = specificationEvalutor.Value.NeuronInLayers(options.Layer.Value);
+            if (options.Neuron.IsOutOfRange(1, neuronInLayers + 1))
+            {
+                this.SessionContext.Output.WriteLine("Neuron no is out of range. Possibilities: {0} - {1}", 1,
+                                                     neuronInLayers);
+                return false;
+            }
+
+            if (!options.InputOfNeuron.HasValue)
+            {
+                this.SessionContext.Output.WriteLine("You must specify input neruon of specified neuron. Use \"input\" option.");
+                return false;
+            }
+
+            var inputNoInNeuron = specificationEvalutor.Value.InputsInNeuron(options.Layer.Value, options.Neuron.Value);
+            if (!options.InputOfNeuron.IsOutOfRange(1, inputNoInNeuron + 1))
+            {
+                return true;
+            }
+
+            this.SessionContext.Output.WriteLine("Input is out of range inside nuron. Possibilities: {0} - {1}", 1,
+                                                 inputNoInNeuron);
+            return false;
         }
 
         private class PerserFileDoesntExistException : SimException

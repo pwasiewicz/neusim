@@ -60,6 +60,7 @@
     <Compile Include="Commands\CommandsContext.cs" />
     <Compile Include="Commands\Default\ConfigCommand.cs" />
     <Compile Include="Commands\Default\DestroyCommand.cs" />
+    <Compile Include="Commands\Default\DisplayCommand.cs" />
     <Compile Include="Commands\Default\InitCommand.cs" />
     <Compile Include="Commands\Default\LearnCommand.cs" />
     <Compile Include="Commands\Default\SimulateCommand.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Exceptions\Default\FileAccessException.cs" />
     <Compile Include="Exceptions\Default\NetworkSaveInternalException.cs" />
     <Compile Include="Exceptions\SimException.cs" />
+    <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\PathStringExtensions.cs" />
     <Compile Include="Helpers\PathMirror.cs" />
     <Compile Include="Program.cs" />
