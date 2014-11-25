@@ -1,6 +1,8 @@
 ﻿namespace NeuSim.AI
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -55,6 +57,11 @@
         public int InputNo
         {
             get { return this.inputsNo; }
+        }
+
+        internal int HiddenNeurons
+        {
+            get { return this.hiddenNeuronsNo; }
         }
 
         public static void Save(NeuronNetwork network, Stream writer)
@@ -170,6 +177,24 @@
 
             this.outputNeuron.Inputs = this.hiddenNeurons.Select(hiddenNeuron => hiddenNeuron.GetOutput()).ToArray();
             return this.outputNeuron;
+        }
+
+        private IList<IList<Neuron>> GetNeronInLayers()
+        {
+            var output = new List<IList<Neuron>>();
+
+            var firstLayer = new List<Neuron>();
+            for (var i = 0; i < this.inputsNo; i++)
+            {
+                firstLayer.Add(new Neuron(1) {NetworkContext = networkCtx});
+            }
+
+            output.Add(firstLayer);
+
+            output.Add(this.hiddenNeurons);
+            output.Add(new[] {this.outputNeuron});
+
+            return output;
         }
     }
 }
