@@ -12,7 +12,7 @@
 
         public string CallFunction(string script, string funcName, object input)
         {
-            return Evaluator.CallFunction(input, script, "aggregate");
+            return Evaluator.CallFunction(input, script, funcName);
         }
     }
 }

@@ -48,7 +48,7 @@
 
             if (!input.Any())
             {
-                this.SessionContext.Output.WriteLine("There is no input valies.");
+                this.SessionContext.Output.WriteLine("There is no input values.");
                 return;
             }
 
