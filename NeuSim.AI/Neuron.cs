@@ -30,6 +30,22 @@
             get { return this.weights; }
         }
 
+        public double Bias
+        {
+            get
+            {
+                return this.bias;
+            }
+
+            set { this.bias = value; }
+        }
+
+        public double this[int index]
+        {
+            get { return this.Inputs[index]; }
+            set { this.Inputs[index] = value; }
+        }
+
         public double[] Inputs
         {
             get { return this.inputs; }

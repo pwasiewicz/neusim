@@ -1,10 +1,12 @@
 ﻿namespace NeuSim.AI.Specification
 {
-    using System;
+    using System.Collections.Generic;
 
     internal class NeuronNetworkSpecification  : INeuronNetworkSpecification
     {
         private readonly NeuronNetwork neuronNetwork;
+
+        private IList<IList<Neuron>> neuronLayers;
 
         public NeuronNetworkSpecification(NeuronNetwork neuronNetwork)
         {
@@ -13,16 +15,31 @@
 
         public int LayerNumber
         {
-            get { return 0; }
+            get { return this.NeuronLayers.Count; }
         }
         public int NeuronInLayers(int layerNo)
         {
-            return 0;
+            return this.NeuronLayers[layerNo].Count;
         }
 
         public int InputsInNeuron(int layerNo, int neuronNo)
         {
-            return 0;
+            return this.NeuronLayers[layerNo][neuronNo].Inputs.Length;
+        }
+
+        public void SetWeight(int layer, int neuron, int input, double value)
+        {
+            this.NeuronLayers[layer][neuron][input] = value;
+        }
+
+        public void SetBias(int layer, int neuron, int input, double value)
+        {
+            this.NeuronLayers[layer][neuron].Bias = value;
+        }
+
+        private IList<IList<Neuron>> NeuronLayers
+        {
+            get { return this.neuronLayers ?? (this.neuronLayers = this.neuronNetwork.GetNeronInLayers()); }
         }
     }
 }

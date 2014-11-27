@@ -163,6 +163,24 @@
             }
         }
 
+        internal IList<IList<Neuron>> GetNeronInLayers()
+        {
+            var output = new List<IList<Neuron>>();
+
+            var firstLayer = new List<Neuron>();
+            for (var i = 0; i < this.inputsNo; i++)
+            {
+                firstLayer.Add(new Neuron(1) { NetworkContext = networkCtx });
+            }
+
+            output.Add(firstLayer);
+
+            output.Add(this.hiddenNeurons);
+            output.Add(new[] { this.outputNeuron });
+
+            return output;
+        }
+
         private Neuron PropagateInput(double[] inputs)
         {
             if (inputs == null)
@@ -177,24 +195,6 @@
 
             this.outputNeuron.Inputs = this.hiddenNeurons.Select(hiddenNeuron => hiddenNeuron.GetOutput()).ToArray();
             return this.outputNeuron;
-        }
-
-        private IList<IList<Neuron>> GetNeronInLayers()
-        {
-            var output = new List<IList<Neuron>>();
-
-            var firstLayer = new List<Neuron>();
-            for (var i = 0; i < this.inputsNo; i++)
-            {
-                firstLayer.Add(new Neuron(1) {NetworkContext = networkCtx});
-            }
-
-            output.Add(firstLayer);
-
-            output.Add(this.hiddenNeurons);
-            output.Add(new[] {this.outputNeuron});
-
-            return output;
-        }
+        }        
     }
 }

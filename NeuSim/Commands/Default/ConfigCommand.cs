@@ -1,5 +1,6 @@
 ﻿namespace NeuSim.Commands.Default
 {
+    using System.Diagnostics;
     using AI.Specification;
     using Arguments;
     using Context;
@@ -82,7 +83,12 @@
                 return;
             }
 
-            throw new NotImplementedException();
+            Debug.Assert(options.Layer != null, "options.Layer != null");
+            Debug.Assert(options.Neuron != null, "options.Neuron != null");
+            Debug.Assert(options.InputOfNeuron != null, "options.InputOfNeuron != null");
+            Debug.Assert(options.Weight != null, "options.Weight != null");
+
+            this.SessionContext.NeuronNetwork.Specification().SetWeight((int)options.Layer, (int)options.Neuron, (int)options.InputOfNeuron, options.Weight.Value);
         }
 
         private bool EnsureSpecifedNeuronWithInputSelected(ConfigSubOptions options)
