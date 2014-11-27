@@ -1,6 +1,7 @@
 ﻿namespace NeuSim.AI.Specification
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     internal class NeuronNetworkSpecification  : INeuronNetworkSpecification
     {
@@ -37,9 +38,16 @@
             this.NeuronLayers[layer][neuron].Bias = value;
         }
 
+        public INeuron[][] GetNeuronLayers()
+        {
+            return this.NeuronLayers.Select(neuronLayer => neuronLayer.Cast<INeuron>().ToArray()).ToArray();
+        }
+
         private IList<IList<Neuron>> NeuronLayers
         {
             get { return this.neuronLayers ?? (this.neuronLayers = this.neuronNetwork.GetNeronInLayers()); }
         }
     }
+
+
 }

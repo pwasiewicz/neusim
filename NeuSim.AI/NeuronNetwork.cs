@@ -1,12 +1,11 @@
 ﻿namespace NeuSim.AI
 {
+    using Specification;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using Specification;
+    using System.Runtime.Serialization.Formatters.Soap;
 
     [Serializable]
     public class NeuronNetwork
@@ -66,7 +65,7 @@
 
         public static void Save(NeuronNetwork network, Stream writer)
         {
-            var formatter = new BinaryFormatter();
+            var formatter = new SoapFormatter();
 
             formatter.Serialize(writer, Version);
             formatter.Serialize(writer, network);
@@ -74,7 +73,7 @@
 
         public static NeuronNetwork Load(Stream stream, NeuronNetworkContext context)
         {
-            var formatter = new BinaryFormatter();
+            var formatter = new SoapFormatter();
             var version = (int)formatter.Deserialize(stream);
             if (version != Version)
             {
@@ -149,7 +148,7 @@
 
         public INeuronNetworkSpecification Specification()
         {
-            return null;
+            return new NeuronNetworkSpecification(this);
         }
 
         internal void SetContext(NeuronNetworkContext context)

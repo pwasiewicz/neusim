@@ -2,9 +2,10 @@
 {
     using System;
     using System.Linq;
+    using NeuSim.AI.Specification;
 
     [Serializable]
-    internal class Neuron
+    internal class Neuron : INeuron
     {
         private static readonly Lazy<Random> RandomHolder = new Lazy<Random>(() => new Random());
 
@@ -77,5 +78,19 @@
 
             this.bias += this.LastError;
         }
+
+        #region INeuron
+
+        double[] INeuron.Weights()
+        {
+            return (double[])this.Weights.Clone();
+        }
+
+        double INeuron.Bias
+        {
+            get { return this.Bias; }
+        }
+
+        #endregion
     }
 }
