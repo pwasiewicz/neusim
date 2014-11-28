@@ -38,6 +38,11 @@
 
         public override void Run(LearnSubOptions options)
         {
+            if (this.WriteHelp(options))
+            {
+                return;
+            }
+
             var pathMirror = new PathMirror(this.MirrorPath, StorageFileInfo, this.SessionContext.ContextDirectory);
             if (options.All)
             {
