@@ -30,6 +30,51 @@ init
   
   Required. Number of neurons in hidden layer. Sample: `-i 2`
 
+config
+-----------
+  `-a, --activation`   
+  
+  Sets the activation function for neurons. Supports base function like Exp, Sin or Cos. The variable is x literal. Sample: **-a 1/(x+Exp(-x))**
+
+  `-d, --derviative`    
+  
+  Sets the derivative of activation function for neurons.  The variable is x literal. Sample: **-d x*(1-x)**
+
+  `-p, --parser`       
+  
+  Allows to the script that will be applied to result  network. The input is file name with parser function specified. Sample: `-p result-parser.js`
+
+  `-e, --epoch`         
+ 
+ Sets the number of epoch used in learn properties.  Sample: **-e 10000**
+
+ `-t, --tolarance`
+  
+  Sets the tolerance of error on output value. Sample: **-t  0.005**
+
+  `-w, --weight`
+  
+  Sets manually weight of specified input in neuron inside  layer. Sample (first layer, first neuron and first  input): **-l 1 -n 1 -i 2 -w 1.02**
+
+ `-b, --bias`          
+ 
+ Sets manually bias of specified input in neuron inside layer. Sample: **-l 1 -n 1 -i 2 -b 0.02**
+
+  `-l, --layer`         
+  
+  Sets the context layer for setting weight or bias.
+
+  `-n, --neuron`        
+  
+  Sets the context layer for setting weight or bias.
+
+  `-i, --input`         
+  
+  Sets the context for input of selected neuroon in "neuron" option.
+
+
+
+
 Learning
 ======
 
