@@ -90,7 +90,25 @@ Simulate
   `--skiptransform`    
   
   (Default: False) Skips transform if available.
+  
+Learn
+-----------
 
+  `-p, --path`
+  
+  Learns network from files inside specified path. Files must end  with end with learn extension. Sample: **-p LearnCases\XOR**
+
+  `-f, --file`    
+  
+  Learns the specified learn case from file. Sample **-f LearnCase.learn**
+
+  `--all`
+  
+  Learns all non-learnt cases from all subdirectories.
+
+  `--force`       
+  
+  Flag that forces to learn cases even it has already been  learnt.
 
 Learning
 ======
@@ -100,3 +118,9 @@ Custom result transformation
 
 Thanks
 ======
+Thank to all contributor of the following libraries used in this project:
+* Autofac
+* Command Line Parser Library
+* Json.NET
+* Jint - Javascript Interpreter for .NET
+* NCalc - Mathematical Expressions Evaluator for .NET
