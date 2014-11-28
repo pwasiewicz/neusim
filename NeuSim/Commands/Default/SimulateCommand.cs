@@ -29,6 +29,11 @@
 
         public override void Run(SimulateSubOptions options)
         {
+            if (this.WriteHelp(options))
+            {
+                return;
+            }
+
             if (options.Files != null)
             {
                 this.RunFiles(options);
@@ -36,6 +41,11 @@
             }
 
             this.RunSingleInput(options);
+        }
+
+        protected override bool ShouldWriteHelp(SimulateSubOptions options)
+        {
+            return options == null || (options.Files == null && options.Input == null);
         }
 
         private void RunSingleInput(SimulateSubOptions options)

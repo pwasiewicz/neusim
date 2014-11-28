@@ -29,6 +29,11 @@
 
         public override void Run(ConfigSubOptions options)
         {
+            if (this.WriteHelp(options))
+            {
+                return;
+            }
+
             var currentOptions = this.SessionContext.ContextConfig ?? new ConfigSubOptions();
 
             if (options.ActivationFunc != null)
@@ -74,6 +79,14 @@
             {
                 throw new FileAccessException(this.SessionContext, ex, this.SessionContext.NeuronContextConfigPath);
             }
+        }
+
+        protected override bool ShouldWriteHelp(ConfigSubOptions options)
+        {
+            return options == null ||
+                   (options.ActivationFunc == null && options.Bias == null && options.DerivativeActivationFunc == null &&
+                    options.Weight == null && options.LearnEpoch == null && options.ResultParserFile == null &&
+                    options.Tolerance == null);
         }
 
         private void SetWeight(ConfigSubOptions options)

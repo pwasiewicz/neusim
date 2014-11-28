@@ -5,10 +5,9 @@
     using Context;
     using Exceptions;
     using Exceptions.Default;
+    using Extensions;
     using System;
     using System.IO;
-    using System.Runtime.Serialization;
-    using Extensions;
 
     internal class InitCommand : CommandBase<InitSubOptions>
     {
@@ -29,6 +28,11 @@
 
         public override void Run(InitSubOptions options)
         {
+            if (this.WriteHelp(options))
+            {
+                return;
+            }
+
             if (this.SessionContext.IsInitialized)
             {
                 throw new SessionAlreadyInitedException(this.SessionContext);

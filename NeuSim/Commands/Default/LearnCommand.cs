@@ -56,6 +56,12 @@
                                                                                                                          .Force));
             }
 
+            // TODO other cases
+        }
+
+        protected override bool ShouldWriteHelp(LearnSubOptions options)
+        {
+            return options == null || (options.File == null && !options.All && options.Paths == null);
         }
 
         private void LearnFromInfoStorage(LearnCasesInfoStorage storageFilesInfo, IEnumerable<FileInfo> filesInfo,

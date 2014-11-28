@@ -29,28 +29,37 @@
         public DisplaySubOptions DisplayVerb { get; set; }
     }
 
-    internal class ConfigSubOptions
+    internal class ConfigSubOptions : IHelpable
     {
-        [Option('a', "activation", HelpText = "Sets activation function for neurons.")]
+        [Option('a', "activation",
+            HelpText =
+                "Sets the activation function for neurons. Supports base function like Exp, Sin or Cos. The variable is x literal. Sample: -a 1/(x+Exp(-x))"
+            )]
         public string ActivationFunc { get; set; }
 
-        [Option('d', "derviative", HelpText = "Sets derivative of activation function for neurons.")]
+        [Option('d', "derviative", HelpText = "Sets the derivative of activation function for neurons. The variable is x literal. Sample: -d x*(1-x)")]
         public string DerivativeActivationFunc { get; set; }
 
-        [Option('p', "parser", HelpText = "Sets the script that will be applied to result network.")]
+        [Option('p', "parser",
+            HelpText =
+                "Allows to the script that will be applied to result network. The input is file name with parser function specified. Sample: -p result-parser.js"
+            )]
         public string ResultParserFile { get; set; }
 
-        [Option('e', "epoch", HelpText = "Sets the number of epoch used in learn properties.")]
+        [Option('e', "epoch", HelpText = "Sets the number of epoch used in learn properties. Sample: -e 10000")]
         public int? LearnEpoch { get; set; }
 
-        [Option('t', "tolarance", HelpText = "Sets the tolerance of error on output value")]
+        [Option('t', "tolarance", HelpText = "Sets the tolerance of error on output value. Sample: -t 0.005")]
         public double? Tolerance { get; set; }
 
-        [OptionArray('w', "weight", HelpText = "Sets manually weights of inputs.")]
+        [OptionArray('w', "weight",
+            HelpText =
+                "Sets manually weight of specified input in neuron inside layer. Sample (first layer, first neuron and first input): -l 1 -n 1 -i 2 -w 1.02"
+            )]
         [JsonIgnore]
         public int? Weight { get; set; }
 
-        [OptionArray('b', "bias", HelpText = "Sets manually baises of inputs.")]
+        [OptionArray('b', "bias", HelpText = "Sets manually bias of specified input in neuron inside layer. Sample: -l 1 -n 1 -i 2 -b 0.02")]
         [JsonIgnore]
         public int? Bias { get; set; }
 
@@ -62,7 +71,7 @@
         [JsonIgnore]
         public int? Neuron { get; set; }
 
-        [Option('t', "input", HelpText = "Sets the context for input of selected neuroon in \"neuron\" option.")]
+        [Option('i', "input", HelpText = "Sets the context for input of selected neuron in \"neuron\" option.")]
         [JsonIgnore]
         public int? InputOfNeuron { get; set; }
 
@@ -112,18 +121,21 @@
         }
     }
 
-    internal class LearnSubOptions
+    internal class LearnSubOptions : IHelpable
     {
-        [OptionArray('p', "path", HelpText = "Learns from files inside specified path.", MutuallyExclusiveSet = "all")]
+        [OptionArray('p', "path",
+            HelpText =
+                "Learns network from files inside specified path. Files must end with end with learn extension. Sample: -p LearnCases\\XOR",
+            MutuallyExclusiveSet = "all")]
         public string[] Paths { get; set; }
 
-        [Option('f', "file", HelpText = "Learns the specified learn case.", MutuallyExclusiveSet = "all")]
+        [Option('f', "file", HelpText = "Learns the specified learn case from file. Sample -f LearnCase.learn", MutuallyExclusiveSet = "all")]
         public string File { get; set; }
 
-        [Option("all", HelpText = "Learns all non-learn cases.", MutuallyExclusiveSet = "all")]
+        [Option("all", HelpText = "Learns all non-learnt cases from all subdirectories.", MutuallyExclusiveSet = "all")]
         public bool All { get; set; }
 
-        [Option("force", HelpText = "Forces to learn cases even it has already been learnt.")]
+        [Option("force", HelpText = "Flag that forces to learn cases even it has already been learnt.")]
         public bool Force { get; set; }
 
         [HelpOption]
@@ -137,12 +149,12 @@
     {
     }
 
-    internal class InitSubOptions
+    internal class InitSubOptions : IHelpable
     {
-        [Option('i', "input", HelpText = "Number of input lnegth of network.", Required = true)]
+        [Option('i', "input", HelpText = "Number of input neuron of network. Sample: -i 2", Required = true)]
         public int Inputs { get; set; }
 
-        [Option('h', "hidden", HelpText = "Number of hiden neurons in hidden layer.", Required = true)]
+        [Option('h', "hidden", HelpText = "Number of neurons in hidden layer. Sample: -i 2", Required = true)]
         public int HiddenInputs { get; set; }
 
         [HelpOption]
@@ -152,18 +164,18 @@
         }
     }
 
-    public class SimulateSubOptions
+    public class SimulateSubOptions : IHelpable
     {
-        [OptionArray('f', "files", HelpText = "Input file for input data.", MutuallyExclusiveSet = "input")]
+        [OptionArray('f', "files", HelpText = "Simulates data from specified files. Sample: -f File1 File2.", MutuallyExclusiveSet = "input")]
         public string[] Files { get; set; }
 
-        [OptionArray('i', "input", HelpText = "Input data for inputs space separated.", MutuallyExclusiveSet = "input")]
+        [OptionArray('i', "input", HelpText = "Simulates the data given in standard input. Sample: -i 0.2 0.4.", MutuallyExclusiveSet = "input")]
         public double[] Input { get; set; }
 
-        [Option("aggregate", HelpText = "Applies custom aggregate function to results.", DefaultValue = false)]
+        [Option("aggregate", HelpText = "Applies custom aggregate function to results. Transform file must be specified.", DefaultValue = false)]
         public bool AgreggateResult { get; set; }
 
-        [Option("skiptransform", HelpText = "Skips transform if needed.", DefaultValue = false)]
+        [Option("skiptransform", HelpText = "Skips transform if available.", DefaultValue = false)]
         public bool IgnoreTransform { get; set; }
 
         [HelpOption]

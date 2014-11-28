@@ -21,16 +21,18 @@
 
             var parser = new Parser(settings =>
                                     {
-                                        settings.HelpWriter = Console.Out;
+                                        settings.HelpWriter = null;
                                         settings.IgnoreUnknownArguments = false;
                                         settings.MutuallyExclusive = true;
                                     });
 
-            if (!parser.ParseArgumentsStrict(args, options, (verCommand, verbOptions) =>
-            {
-                invokedVerb = verCommand;
-                invokerVerbOptions = verbOptions;
-            }))
+            parser.ParseArgumentsStrict(args, options, (verCommand, verbOptions) =>
+                                                       {
+                                                           invokedVerb = verCommand;
+                                                           invokerVerbOptions = verbOptions;
+                                                       }, () => invokerVerbOptions = null);
+
+            if (invokedVerb == null)
             {
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
