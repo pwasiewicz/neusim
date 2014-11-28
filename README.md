@@ -118,8 +118,53 @@ Learn
 Learning
 ======
 
+Learng file is simple JSON object that represents any number of learn cases. Learn case consists of input and expected output. Neusim uses back propagation algorithm to learn network. Sample learn case of XOR function:
+```javascript
+[
+   {
+      "Output":1,
+      "Input":[
+         1,
+         0
+      ]
+   },
+   {
+      "Output":1,
+      "Input":[
+         0,
+         1
+      ]
+   },
+   {
+      "Output":0,
+      "Input":[
+         0,
+         0
+      ]
+   },
+   {
+      "Output":0,
+      "Input":[
+         1,
+         1
+      ]
+   }
+]
+```
+
 Custom result transformation
 ======
+You can apply transform function in order to interpret result:
+```javascript
+function transform(x) {
+  if (x < 0.5) {
+     return "yes";
+  } else {
+     return "no";
+  }
+}
+```
+
 
 Thanks
 ======
