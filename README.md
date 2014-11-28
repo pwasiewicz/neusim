@@ -24,11 +24,11 @@ init
 -----------
   `-i, --input` 
   
-  Required. Number of input neuron of network. Sample: `-i 2`
+  Required. Number of input neuron of network. Sample: **-i 2**
   
   `-h, --hidden` 
   
-  Required. Number of neurons in hidden layer. Sample: `-i 2`
+  Required. Number of neurons in hidden layer. Sample: **-i 2**
 
 config
 -----------
@@ -72,7 +72,24 @@ config
   
   Sets the context for input of selected neuroon in "neuron" option.
 
+Simulate
+-----------
 
+  `-f, --files`       
+  
+  Simulates data from specified files. Sample: **-f File1 File2**
+
+  `-i, --input`        
+  
+  Simulates the data given in standard input. Sample: **-i 0.2  0.4**
+
+  `--aggregate`        
+  
+  (Default: False) Applies custom aggregate function to results. Transform file must be specified.
+
+  `--skiptransform`    
+  
+  (Default: False) Skips transform if available.
 
 
 Learning
