@@ -91,6 +91,11 @@ Simulate
   
   (Default: False) Skips transform if available.
   
+### Format of input files
+   The input files are simple json array wtih **double** values of input neuron. Sample (three inputs):
+   
+   `[1.2, 1.3, 1.3]`
+  
 Learn
 -----------
 
