@@ -1,6 +1,7 @@
 ﻿namespace NeuSim.Arguments
 {
     using CommandLine;
+    using CommandLine.Text;
     using Newtonsoft.Json;
     using System.IO;
 
@@ -9,16 +10,16 @@
         /// <summary>
         /// Gets or sets the Context.
         /// </summary>
-        [VerbOption("init", HelpText = "Inits new simulator session inside current directory.")]
+        [VerbOption("init", HelpText = "Inits new simulator session inside working directory.")]
         public InitSubOptions InitVerb { get; set; }
 
-        [VerbOption("config", HelpText = "Sets to configuration of session.")]
+        [VerbOption("config", HelpText = "Allows to specify configuration of current session.")]
         public ConfigSubOptions ConfigVerb { get; set; }
 
-        [VerbOption("destroy", HelpText = "Destroys session inside current directory.")]
+        [VerbOption("destroy", HelpText = "Destroys session inside working directory if available.")]
         public DestroySubOptions DestroyVerb { get; set; }
 
-        [VerbOption("simulate", HelpText = "Simulates the specified data via network.")]
+        [VerbOption("simulate", HelpText = "Simulates the specified data with neuron network")]
         public SimulateSubOptions SimulateVerb { get; set; }
 
         [VerbOption("learn", HelpText = "Learn the network of with specified data.")]
@@ -64,6 +65,12 @@
         [Option('t', "input", HelpText = "Sets the context for input of selected neuroon in \"neuron\" option.")]
         [JsonIgnore]
         public int? InputOfNeuron { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
 
         public bool IsDefined(TextWriter errorWriter)
         {
@@ -118,6 +125,12 @@
 
         [Option("force", HelpText = "Forces to learn cases even it has already been learnt.")]
         public bool Force { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
     }
 
     internal class DestroySubOptions
@@ -131,6 +144,12 @@
 
         [Option('h', "hidden", HelpText = "Number of hiden neurons in hidden layer.", Required = true)]
         public int HiddenInputs { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
     }
 
     public class SimulateSubOptions
@@ -146,6 +165,12 @@
 
         [Option("skiptransform", HelpText = "Skips transform if needed.", DefaultValue = false)]
         public bool IgnoreTransform { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
     }
 
     public class DisplaySubOptions

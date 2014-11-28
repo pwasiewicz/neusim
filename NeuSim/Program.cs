@@ -1,15 +1,14 @@
 ﻿namespace NeuSim
 {
-    using System.Linq;
     using Arguments;
     using Autofac;
     using CommandLine;
     using Commands;
     using Context;
     using Exceptions;
+    using Services.Implementations;
     using System;
     using System.Reflection;
-    using Services.Implementations;
 
     public static class Program
     {
@@ -24,6 +23,7 @@
                                     {
                                         settings.HelpWriter = Console.Out;
                                         settings.IgnoreUnknownArguments = false;
+                                        settings.MutuallyExclusive = true;
                                     });
 
             if (!parser.ParseArgumentsStrict(args, options, (verCommand, verbOptions) =>
@@ -58,7 +58,7 @@
             var builder = new ContainerBuilder();
 
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-                   .Where(type => typeof (ICommand).IsAssignableFrom(type))
+                   .Where(type => typeof(ICommand).IsAssignableFrom(type))
                    .As<ICommand>();
 
             builder.RegisterType<SessionContext>()
