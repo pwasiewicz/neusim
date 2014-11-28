@@ -10,7 +10,8 @@ Features
 * applying custom function to transform / interpret output (via javascript)
 * JSON input
 
-! Interface
+Interface
+======
 NeuSim contains git like interface (verbs) with the following commands:
    * **init**:            Inits new simulator session inside working directory.
    * **config**:       Allows to specify configuration of current session.
@@ -19,6 +20,21 @@ NeuSim contains git like interface (verbs) with the following commands:
    * **learn**:         Learn the network of with specified data.
    * **display**:      Displays the neuron network
 
-! Learing
+init
+-----------
+  `-i, --input` 
+  
+  Required. Number of input neuron of network. Sample: `-i 2`
+  
+  `-h, --hidden` 
+  
+  Required. Number of neurons in hidden layer. Sample: `-i 2`
 
-! Custom result transformation
+Learning
+======
+
+Custom result transformation
+======
+
+Thanks
+======
