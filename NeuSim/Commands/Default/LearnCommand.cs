@@ -2,6 +2,7 @@
 {
     using Arguments;
     using Context;
+    using Exceptions;
     using Helpers;
     using Newtonsoft.Json;
     using Services;
@@ -12,6 +13,8 @@
     internal class LearnCommand : CommandBase<LearnSubOptions>
     {
         private const string StorageFileInfo = "filehashes";
+
+        private const string LearnCaseExt = ".learn";
 
         private readonly IHashCalculator hashCalculator;
 
@@ -56,12 +59,61 @@
                                                                                                                           info
                                                                                                                               .FullName
                                                                                                                               .EndsWith
-                                                                                                                              (".learn")),
+                                                                                                                              (LearnCaseExt)),
                                                                                                                      options
                                                                                                                          .Force));
             }
 
-            // TODO other cases
+            if (options.File != null)
+            {
+                var filePath = this.SessionContext.RelativeToAbsolute(options.File);
+                if (!File.Exists(filePath))
+                {
+                    throw new LearnFileDoesntExist(this.SessionContext, filePath);
+                }
+
+                var fileDirectory = Path.GetDirectoryName(filePath);
+                pathMirror.VisitSingle<LearnCasesInfoStorage>(this.SessionContext.WorkingPath, fileDirectory,
+                                                              (storage, infos) => this
+                                                                                      .LearnFromInfoStorage
+                                                                                      (storage,
+                                                                                       infos
+                                                                                           .Where
+                                                                                           (info
+                                                                                            =>
+                                                                                            info
+                                                                                                .FullName
+                                                                                                .EndsWith
+                                                                                                (LearnCaseExt) &&
+                                                                                            info.FullName.Equals(
+                                                                                                                 filePath)),
+                                                                                       options
+                                                                                           .Force));
+
+                this.LearnCase(filePath);
+            }
+
+
+            if (options.Paths != null)
+            {
+                foreach (var path in options.Paths)
+                {
+                    pathMirror.VisitSingle<LearnCasesInfoStorage>(this.SessionContext.WorkingPath, path,
+                                                                  (storage, infos) => this
+                                                                                          .LearnFromInfoStorage
+                                                                                          (storage,
+                                                                                           infos
+                                                                                               .Where
+                                                                                               (info
+                                                                                                =>
+                                                                                                info
+                                                                                                    .FullName
+                                                                                                    .EndsWith
+                                                                                                    (LearnCaseExt)),
+                                                                                           options
+                                                                                               .Force));
+                }
+            }
         }
 
         protected override bool ShouldWriteHelp(LearnSubOptions options)
@@ -142,6 +194,23 @@
             using (var stream = new FileStream(inputFile, FileMode.Open))
             {
                 this.LearnCase(stream);
+            }
+        }
+
+
+        private class LearnFileDoesntExist : SimException
+        {
+            private string file;
+
+            public LearnFileDoesntExist(SessionContext context, string file)
+                : base(context)
+            {
+                this.file = file;
+            }
+
+            public override void WriteError()
+            {
+                this.Context.Output.WriteLine("Cannot read learn case - file {0} does not exist.", this.file);
             }
         }
     }
