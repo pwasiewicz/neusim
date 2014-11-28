@@ -5,7 +5,7 @@ neusim
 
 Features
 ======
-* git like interface
+* git-like interface
 * learning with backpropagation algorithm
 * applying custom function to transform / interpret output (via javascript)
 * JSON input
@@ -94,7 +94,9 @@ Simulate
 ### Format of input files
    The input files are simple json array wtih **double** values of input neuron. Sample (three inputs):
    
-   `[1.2, 1.3, 1.3]`
+```javascript
+[1.2, 1.3, 1.3]
+```
   
 Learn
 -----------
@@ -169,16 +171,13 @@ The sample script you should put in js file (js extension is not required) and s
 
 ```ShellSession
 PS> neusim config --parser myscriptfile.js
-
 ```
-
 
 Then simulating will print output transformed:
 
 ```ShellSession
 PS> neusim simulate -i 1 0
 yes
-
 ```
 
 ### Result aggregation
@@ -198,13 +197,12 @@ function aggregate(x) {
         return "below or equal 0";
     }
 } 
-
 ```
 Sample usage:
+
 ```ShellSession
 PS> neusim simulate -f input1.in input2.in
 above 0
-
 ```
 
 Thanks
