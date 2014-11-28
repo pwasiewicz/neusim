@@ -165,6 +165,21 @@ function transform(x) {
 }
 ```
 
+The sample script you should put in js file (js extension is not required) and set it in config:
+
+```ShellSession
+PS> neusim config --parser myscriptfile.js
+
+```
+
+
+Then simulating will print output transformed:
+
+```ShellSession
+PS> neusim simulate -i 1 0
+yes
+
+```
 
 Thanks
 ======
