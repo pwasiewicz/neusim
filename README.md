@@ -181,6 +181,32 @@ yes
 
 ```
 
+### Result aggregation
+
+You can also transform multiple inputs result. All you need is to write another function in script that is used to store transform function.
+
+```javascript
+function aggregate(x) {
+    var result = 0;
+    for (var i = 0; i < x.length; i++) {
+        result += x[i];
+    }
+    
+    if ((result / 2) > 0) {
+        return "above 0";
+    } else {
+        return "below or equal 0";
+    }
+} 
+
+```
+Sample usage:
+```ShellSession
+PS> neusim simulate -f input1.in input2.in
+above 0
+
+```
+
 Thanks
 ======
 Thank to all contributor of the following libraries used in this project:
