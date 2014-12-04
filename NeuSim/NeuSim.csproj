@@ -75,6 +75,7 @@
     <Compile Include="Exceptions\SimException.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\PathStringExtensions.cs" />
+    <Compile Include="Helpers\PathCompressor.cs" />
     <Compile Include="Helpers\PathMirror.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,6 +92,10 @@
     <ProjectReference Include="..\NeuSim.AI\NeuSim.AI.csproj">
       <Project>{E0FD5728-E21D-40AB-B82D-3B38D5863E9A}</Project>
       <Name>NeuSim.AI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NeuSim.Compressing\NeuSim.Compressing.csproj">
+      <Project>{8f9b1041-77a3-4ba7-8ff6-698a9ddff5dd}</Project>
+      <Name>NeuSim.Compressing</Name>
     </ProjectReference>
     <ProjectReference Include="..\NeuSim.Eval\NeuSim.Eval.csproj">
       <Project>{62559DBB-2DDB-4BA2-8209-AD53442D4ADA}</Project>
