@@ -7,9 +7,6 @@
 
     internal class RunArguments
     {
-        /// <summary>
-        /// Gets or sets the Context.
-        /// </summary>
         [VerbOption("init", HelpText = "Inits new simulator session inside working directory.")]
         public InitSubOptions InitVerb { get; set; }
 
@@ -27,9 +24,27 @@
 
         [VerbOption("display", HelpText = "Displays the neuron network")]
         public DisplaySubOptions DisplayVerb { get; set; }
+
+        [VerbOption("export", HelpText = "Exports the whole network with learnt files.")]
+        public ExportSubOptions ExportVerb { get; set; }
+
+        [VerbOption("import", HelpText = "Imports the previously exported network.")]
+        public LearnSubOptions ImportVerb { get; set; }
     }
 
-    internal class ConfigSubOptions : IHelpable
+    internal class ImportSubOptions : DefaultHelpable
+    {
+        [Option('n', "name", HelpText = "Name of network to import.")]
+        public string Name { get; set; }
+    }
+
+    internal class ExportSubOptions : DefaultHelpable
+    {
+        [Option('n', "name", HelpText = "Name of exported network.")]
+        public string Name { get; set; }
+    }
+
+    internal class ConfigSubOptions : DefaultHelpable
     {
         [Option('a', "activation",
             HelpText =
@@ -78,12 +93,6 @@
         [JsonIgnore]
         public int? InputOfNeuron { get; set; }
 
-        [HelpOption]
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
-
         public bool IsDefined(TextWriter errorWriter)
         {
             if (string.IsNullOrWhiteSpace(this.ActivationFunc))
@@ -125,7 +134,7 @@
         }
     }
 
-    internal class LearnSubOptions : IHelpable
+    internal class LearnSubOptions : DefaultHelpable
     {
         [OptionArray('p', "path",
             HelpText =
@@ -141,34 +150,22 @@
 
         [Option("force", HelpText = "Flag that forces to learn cases even it has already been learnt.")]
         public bool Force { get; set; }
-
-        [HelpOption]
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
     }
 
     internal class DestroySubOptions
     {
     }
 
-    internal class InitSubOptions : IHelpable
+    internal class InitSubOptions : DefaultHelpable
     {
         [Option('i', "input", HelpText = "Number of input neuron of network. Sample: -i 2", Required = true)]
         public int Inputs { get; set; }
 
         [Option('h', "hidden", HelpText = "Number of neurons in hidden layer. Sample: -i 2", Required = true)]
         public int HiddenInputs { get; set; }
-
-        [HelpOption]
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
     }
 
-    public class SimulateSubOptions : IHelpable
+    public class SimulateSubOptions : DefaultHelpable
     {
         [OptionArray('f', "files", HelpText = "Simulates data from specified files. Sample: -f File1 File2.", MutuallyExclusiveSet = "input")]
         public string[] Files { get; set; }
@@ -181,16 +178,19 @@
 
         [Option("skiptransform", HelpText = "Skips transform if available.", DefaultValue = false)]
         public bool IgnoreTransform { get; set; }
-
-        [HelpOption]
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
     }
 
     public class DisplaySubOptions
     {
 
+    }
+
+    public abstract class DefaultHelpable : IHelpable
+    {
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
     }
 }
