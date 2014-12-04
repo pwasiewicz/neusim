@@ -1,6 +1,5 @@
 ﻿namespace NeuSim.Commands.Default
 {
-    using System.Diagnostics;
     using AI.Specification;
     using Arguments;
     using Context;
@@ -8,6 +7,7 @@
     using Exceptions.Default;
     using Extensions;
     using System;
+    using System.Diagnostics;
     using System.IO;
 
     internal class ConfigCommand : CommandBase<ConfigSubOptions>
@@ -49,6 +49,11 @@
             if (options.Tolerance != null)
             {
                 currentOptions.Tolerance = options.Tolerance;
+            }
+
+            if (options.LearnStep != null)
+            {
+                currentOptions.LearnStep = options.LearnStep;
             }
 
             if (options.ResultParserFile != null)

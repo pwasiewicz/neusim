@@ -52,6 +52,9 @@
         [Option('t', "tolarance", HelpText = "Sets the tolerance of error on output value. Sample: -t 0.005")]
         public double? Tolerance { get; set; }
 
+        [Option('s', "step", HelpText = "Sets the learn step - how sensitive should network be while learning. Less = more sensitive. Sample: -s 0.5")]
+        public double? LearnStep { get; set; }
+
         [OptionArray('w', "weight",
             HelpText =
                 "Sets manually weight of specified input in neuron inside layer. Sample (first layer, first neuron and first input): -l 1 -n 1 -i 2 -w 1.02"
@@ -116,7 +119,8 @@
                        DerivativeActivationFunc = "x * (1 - x)",
                        LearnEpoch = 10000,
                        ResultParserFile = null,
-                       Tolerance = 0.001
+                       Tolerance = 0.001,
+                       LearnStep = 1
                    };
         }
     }

@@ -51,6 +51,10 @@ config
  `-t, --tolarance`
   
   Sets the tolerance of error on output value. Sample: **-t  0.005**
+  
+  `-s, --step`
+  
+  Sets the learn step - how sensitive should network be while learning. Less = more sensitive. Sample: **-s 0.5**
 
   `-w, --weight`
   
