@@ -111,6 +111,11 @@
                 return false;
             }
 
+            if (this.LearnStep == null)
+            {
+                return false;
+            }
+
             if (!string.IsNullOrWhiteSpace(this.DerivativeActivationFunc))
             {
                 return true;

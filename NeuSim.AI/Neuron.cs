@@ -73,7 +73,7 @@
         {
             for (var i = 0; i < this.weights.Length; i++)
             {
-                this.weights[i] += this.LastError * this.inputs[i] * this.NetworkContext.LearnStep;
+                this.weights[i] += this.LastError*this.inputs[i] * this.NetworkContext.LearnStep;
             }
 
             this.bias += this.LastError;

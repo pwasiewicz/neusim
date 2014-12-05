@@ -6,6 +6,7 @@
     using Commands;
     using Context;
     using Exceptions;
+    using NeuSim.Compressing;
     using Services.Implementations;
     using System;
     using System.Reflection;
@@ -70,6 +71,7 @@
 
             builder.RegisterType<EvaluatorService>().AsImplementedInterfaces();
             builder.RegisterType<HashCalculator>().AsImplementedInterfaces();
+            builder.RegisterType<CompressionService>().AsImplementedInterfaces();
 
             builder.RegisterType<CommandsContext>().AsSelf();
 

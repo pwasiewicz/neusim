@@ -111,6 +111,7 @@
                                           Derivative =
                                               Evaluator.ToDelegate(configOptions.DerivativeActivationFunc),
                                           LearnEpoch = configOptions.LearnEpoch.Value,
+                                          LearnStep = configOptions.LearnStep.Value,
                                           ErrorTolerance = configOptions.Tolerance.Value
                                       };
 
