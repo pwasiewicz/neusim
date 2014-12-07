@@ -34,14 +34,17 @@
 
     internal class ImportSubOptions : DefaultHelpable
     {
-        [Option('n', "name", HelpText = "Name of network to import.")]
+        [Option('n', "name", HelpText = "Name of network to import.", Required = true)]
         public string Name { get; set; }
     }
 
     internal class ExportSubOptions : DefaultHelpable
     {
-        [Option('n', "name", HelpText = "Name of exported network.")]
+        [Option('n', "name", HelpText = "Name of exported network.", Required = true)]
         public string Name { get; set; }
+        
+        [Option('o', "override", HelpText = "Override exsiting exported network.")]
+        public bool? Override { get; set; }
     }
 
     internal class ConfigSubOptions : DefaultHelpable

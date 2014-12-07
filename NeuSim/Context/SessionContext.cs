@@ -104,6 +104,7 @@
 
                 Debug.Assert(configOptions.LearnEpoch != null, "configOptions.LearnEpoch != null");
                 Debug.Assert(configOptions.Tolerance != null, "configOptions.Tolerance != null");
+                Debug.Assert(configOptions.LearnStep != null, "configOptions.LearnStep != null");
 
                 this.networkContext = new NeuronNetworkContext
                                       {

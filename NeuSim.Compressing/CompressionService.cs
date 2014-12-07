@@ -1,11 +1,11 @@
 ﻿namespace NeuSim.Compressing
 {
-    using System;
+    using Ionic.Zip;
+    using NeuSim.Common.Services;
+    using NeuSim.Compressing.Helpers;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using Ionic.Zip;
-    using NeuSim.Common.Services;
 
     public class CompressionService : ICompressionService
     {
@@ -21,10 +21,18 @@
             }
         }
 
+        public void UncompressFilder(string package, string outputPath)
+        {
+            using (var zip = new ZipFile(outputPath))
+            {
+                zip.ExtractAll(package, ExtractExistingFileAction.OverwriteSilently);
+            }
+        }
+
         private void AddFiles(ZipFile zipFile, DirectoryInfo current, DirectoryInfo root,
                               string[] excludedExtensions)
         {
-            var rootUri = new Uri(root.FullName);
+            var rootPath = root.FullName.AddSeparatorIfNeeded();
             foreach (
                 var file in
                     current.GetFiles().Where(file => excludedExtensions.All(ext => !file.Extension.EndsWith(ext)))
@@ -32,10 +40,10 @@
             {
                 Debug.Assert(file.Directory != null, "file.Directory != null");
 
-                var dirName = file.Directory.FullName;
-                var relativeDir = rootUri.MakeRelativeUri(new Uri(dirName));
-                // TODO remove .nai from begging
-                zipFile.AddFile(file.FullName, relativeDir.OriginalString);
+                var dirName = file.Directory.FullName.AddSeparatorIfNeeded();
+                var relativeDir = PathHelpers.PathDifference(rootPath, dirName);
+
+                zipFile.AddFile(file.FullName, relativeDir);
             }
 
             foreach (var directoryInfo in current.GetDirectories())
