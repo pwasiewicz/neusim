@@ -30,6 +30,18 @@
 
         [VerbOption("import", HelpText = "Imports the previously exported network.")]
         public LearnSubOptions ImportVerb { get; set; }
+
+        [VerbOption("exported", HelpText = "Manages exported networks.")]
+        public ExportedSubOptions ExportedVerb { get; set; }
+    }
+
+    internal class ExportedSubOptions : DefaultHelpable
+    {
+        [Option('l', "list", DefaultValue = false, HelpText = "Lists all exported networks.", MutuallyExclusiveSet = "ExportedOptions")]
+        public bool List { get; set; }
+
+        [Option('d', "delete", HelpText = "Lists all exported networks.", MutuallyExclusiveSet = "ExportedOptions")]
+        public string Delete { get; set; }
     }
 
     internal class ImportSubOptions : DefaultHelpable

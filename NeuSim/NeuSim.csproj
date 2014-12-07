@@ -63,6 +63,7 @@
     <Compile Include="Commands\Default\DestroyCommand.cs" />
     <Compile Include="Commands\Default\DisplayCommand.cs" />
     <Compile Include="Commands\Default\ExportCommand.cs" />
+    <Compile Include="Commands\Default\ExportedCommand.cs" />
     <Compile Include="Commands\Default\ImportCommand.cs" />
     <Compile Include="Commands\Default\InitCommand.cs" />
     <Compile Include="Commands\Default\LearnCommand.cs" />
