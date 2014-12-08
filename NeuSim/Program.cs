@@ -72,10 +72,6 @@
             builder.Register<LearnCommand>().As<ICommand>();
             builder.Register<SimulateCommand>().As<ICommand>();
 
-            //builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-            //       .Where(type => typeof(ICommand).IsAssignableFrom(type))
-            //       .As<ICommand>();
-
             builder.Register<SessionContext>()
                    .As<SessionContext>().WithNamedParameter("defaultWriter", Console.Out)
                    .PerLifetimeScope();
