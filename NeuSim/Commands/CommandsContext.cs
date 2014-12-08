@@ -1,17 +1,15 @@
 ﻿namespace NeuSim.Commands
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
 
     internal class CommandsContext
     {
-        private readonly Lazy<IEnumerable<ICommand>> commandsEvaluator;
+        private readonly IEnumerable<ICommand> commandsEvaluator;
 
         private IDictionary<string, ICommand> commands; 
 
-        public CommandsContext(Lazy<IEnumerable<ICommand>> commandsEvaluator)
+        public CommandsContext(IEnumerable<ICommand> commandsEvaluator)
         {
             this.commandsEvaluator = commandsEvaluator;
         }
@@ -31,7 +29,7 @@
                 return;
             }
 
-            this.commands = this.commandsEvaluator.Value.ToDictionary(command => command.Name);
+            this.commands = this.commandsEvaluator.ToDictionary(command => command.Name);
         }
     }
 }
