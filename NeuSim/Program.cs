@@ -62,15 +62,9 @@
         {
             var builder = new ContainerBuilder();
 
-            builder.Register<ConfigCommand>().As<ICommand>();
-            builder.Register<DestroyCommand>().As<ICommand>();
-            builder.Register<DisplayCommand>().As<ICommand>();
-            builder.Register<ExportCommand>().As<ICommand>();
-            builder.Register<ExportedCommand>().As<ICommand>();
-            builder.Register<ImportCommand>().As<ICommand>();
-            builder.Register<InitCommand>().As<ICommand>();
-            builder.Register<LearnCommand>().As<ICommand>();
-            builder.Register<SimulateCommand>().As<ICommand>();
+            builder.Register(type => typeof(ICommand).IsAssignableFrom(type), Assembly.GetExecutingAssembly())
+                   .As<ICommand>()
+                   .PerLifetimeScope();
 
             builder.Register<SessionContext>()
                    .As<SessionContext>().WithNamedParameter("defaultWriter", Console.Out)

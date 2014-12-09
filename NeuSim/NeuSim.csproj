@@ -38,8 +38,9 @@
     <Reference Include="CommandLine">
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
     </Reference>
-    <Reference Include="MiniAutFac">
-      <HintPath>..\packages\MiniAutFac.1.1\lib\portable-net45+sl50+win+wpa81+wp80\MiniAutFac.dll</HintPath>
+    <Reference Include="MiniAutFac, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MiniAutFac.1.2.2\lib\portable-net45+sl50+win+wpa81+wp80\MiniAutFac.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
