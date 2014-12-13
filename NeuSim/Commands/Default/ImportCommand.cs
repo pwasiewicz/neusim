@@ -4,11 +4,10 @@
     using NeuSim.Arguments;
     using NeuSim.Common.Services;
     using NeuSim.Context;
+    using NeuSim.Helpers;
 
     internal class ImportCommand : CommandBase<ImportSubOptions>
     {
-        private const string ExportedExt = "zip";
-
         private readonly ICompressionService compressionService;
 
         public ImportCommand(SessionContext sessionContext, ICompressionService compressionService) : base(sessionContext)
@@ -35,14 +34,14 @@
             }
 
             var fullPath = Path.Combine(this.SessionContext.ContextDirectory,
-                                        string.Format("{0}.{1}", options.Name, ExportedExt));
+                                        string.Format("{0}.{1}", options.Name, ExportingContext.ExporedExtensions));
             this.compressionService.UncompressFilder(fullPath, this.SessionContext.ContextDirectory);
         }
 
         public bool IsExported(ImportSubOptions options)
         {
             var fullPath = Path.Combine(this.SessionContext.ContextDirectory,
-                                        string.Format("{0}.{1}", options.Name, ExportedExt));
+                                        string.Format("{0}.{1}", options.Name, ExportingContext.ExporedExtensions));
 
             return !File.Exists(fullPath);
         }

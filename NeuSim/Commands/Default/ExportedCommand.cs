@@ -3,12 +3,10 @@
     using System.IO;
     using NeuSim.Arguments;
     using NeuSim.Context;
+    using NeuSim.Helpers;
 
     internal class ExportedCommand : CommandBase<ExportedSubOptions>
     {
-        // TODO move to command
-        private const string ExportedExt = "zip";
-
         public ExportedCommand(SessionContext sessionContext) : base(sessionContext)
         {
         }
@@ -30,7 +28,7 @@
 
                 var allExported =
                     (new DirectoryInfo(this.SessionContext.ContextDirectory)).GetFiles(string.Format("*.{0}",
-                                                                                                     ExportedExt));
+                                                                                                     ExportingContext.ExporedExtensions));
 
                 foreach (var file in allExported)
                 {
@@ -43,7 +41,8 @@
             if (options.Delete != null)
             {
                 var exportedNetwork = Path.Combine(this.SessionContext.ContextDirectory,
-                                                   string.Format("{0}.{1}", options.Delete, ExportedExt));
+                                                   string.Format("{0}.{1}", options.Delete,
+                                                                 ExportingContext.ExporedExtensions));
 
                 if (!File.Exists(exportedNetwork))
                 {
