@@ -40,7 +40,7 @@
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
-            using (var scope = BuildIoC().BeginLifetimeScope())
+            using (var scope = BuildIoC())
             {
                 BeginNeuSim(scope.Resolve<CommandsContext>(), invokedVerb, invokerVerbOptions);
             }
