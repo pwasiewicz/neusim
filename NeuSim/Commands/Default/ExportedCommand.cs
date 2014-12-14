@@ -1,6 +1,7 @@
 ﻿namespace NeuSim.Commands.Default
 {
     using System.IO;
+    using System.Linq;
     using NeuSim.Arguments;
     using NeuSim.Context;
     using NeuSim.Helpers;
@@ -29,6 +30,12 @@
                 var allExported =
                     (new DirectoryInfo(this.SessionContext.ContextDirectory)).GetFiles(string.Format("*.{0}",
                                                                                                      ExportingContext.ExporedExtensions));
+
+                if (!allExported.Any())
+                {
+                    this.SessionContext.Output.WriteLine("No exported networks.");
+                    return;
+                }
 
                 foreach (var file in allExported)
                 {

@@ -12,6 +12,12 @@
                 File.Delete(path);
             }
 
+            var directoryName = Path.GetDirectoryName(path);
+            if (!Directory.Exists(directoryName))
+            {
+                Directory.CreateDirectory(directoryName);
+            }
+
             File.WriteAllText(path, JsonConvert.SerializeObject(value));
         }
 
