@@ -7,7 +7,6 @@
     using Exceptions;
     using MiniAutFac;
     using MiniAutFac.Interfaces;
-    using NeuSim.Commands.Default;
     using NeuSim.Compressing;
     using Services.Implementations;
     using System;

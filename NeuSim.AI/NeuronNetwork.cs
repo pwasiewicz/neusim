@@ -96,7 +96,7 @@
             return this.PropagateInput(inputs).GetOutput();
         }
 
-        public void Train(double[][] inputs, double[] results)
+        public void Train(double[][] inputs, double[] results, Action<int, int> progress)
         {
             if (inputs == null)
             {
@@ -120,6 +120,7 @@
                 epoch += 1;
                 for (var i = 0; i < inputs.Length; i++)
                 {
+                    progress(epoch, i);
                     var currentVector = inputs[i];
                     this.PropagateInput(currentVector);
 
