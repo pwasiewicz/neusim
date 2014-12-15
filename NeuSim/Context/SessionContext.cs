@@ -6,7 +6,6 @@
     using Eval;
     using Exceptions.Default;
     using Extensions;
-    using NeuSim.Commands.Default;
     using NeuSim.Exceptions;
     using Services;
     using System;
@@ -244,6 +243,6 @@
                 this.Context.Output.WriteLine(
                     "Cannot write network state. No sufficient permssion or internal error occured.");
             }
-        } 
+        }
     }
 }

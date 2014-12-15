@@ -9,7 +9,8 @@
         // TODO move to command
         private const string ExportedExt = "zip";
 
-        public ExportedCommand(SessionContext sessionContext) : base(sessionContext)
+        public ExportedCommand(SessionContext sessionContext)
+            : base(sessionContext)
         {
         }
 
@@ -27,7 +28,6 @@
         {
             if (options.List)
             {
-
                 var allExported =
                     (new DirectoryInfo(this.SessionContext.ContextDirectory)).GetFiles(string.Format("*.{0}",
                                                                                                      ExportedExt));

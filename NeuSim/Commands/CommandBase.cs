@@ -1,6 +1,5 @@
 ﻿namespace NeuSim.Commands
 {
-    using System;
     using Arguments;
     using NeuSim.Context;
 
