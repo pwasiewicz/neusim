@@ -186,8 +186,10 @@
             var inputs = learnCases.Select(learnCase => learnCase.Input).ToArray();
             var outputs = learnCases.Select(learnCase => learnCase.Output).ToArray();
 
-            this.SessionContext.NeuronNetwork.Train(inputs, outputs);
-        }
+            this.SessionContext.NeuronNetwork.Train(inputs, outputs,
+                                                    (epoch, input) =>
+                                                    this.SessionContext.Output.WriteLine(
+                                                        "Current epoch: {0}, case: {1}", epoch, input));        }
 
         private void LearnCase(string inputFile)
         {

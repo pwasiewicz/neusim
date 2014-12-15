@@ -76,6 +76,7 @@
     <Compile Include="Exceptions\SimException.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\PathStringExtensions.cs" />
+    <Compile Include="Helpers\ExportingContext.cs" />
     <Compile Include="Helpers\PathMirror.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

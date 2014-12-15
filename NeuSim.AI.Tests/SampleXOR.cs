@@ -17,7 +17,7 @@
                                                         });
 
             neuronNetwork.Train(new[] {new[] {1d, 0d}, new[] {0d, 1d}, new[] {1d, 1d}, new[] {0d, 0d}},
-                                new[] {1d, 1d, 0d, 0d});
+                                new[] {1d, 1d, 0d, 0d}, (i, i1) => { });
 
             var result = neuronNetwork.Process(new[] {1d, 1d});
         }

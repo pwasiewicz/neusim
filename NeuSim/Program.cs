@@ -7,7 +7,6 @@
     using Exceptions;
     using MiniAutFac;
     using MiniAutFac.Interfaces;
-    using NeuSim.Commands.Default;
     using NeuSim.Compressing;
     using Services.Implementations;
     using System;
@@ -40,7 +39,7 @@
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
-            using (var scope = BuildIoC().BeginLifetimeScope())
+            using (var scope = BuildIoC())
             {
                 BeginNeuSim(scope.Resolve<CommandsContext>(), invokedVerb, invokerVerbOptions);
             }
