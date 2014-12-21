@@ -45,7 +45,7 @@
         {
             var fileName = Path.Combine(this.SessionContext.ContextDirectory,
                                         string.Format("{0}.{1}", options.Name, ExportingContext.ExporedExtensions));
-            if (!File.Exists(fileName))
+            if (File.Exists(fileName))
             {
                 return true;
             }
