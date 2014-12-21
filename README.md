@@ -212,7 +212,6 @@ above 0
 Thanks
 ======
 Thank to all contributor of the following libraries used in this project:
-* Autofac
 * Command Line Parser Library
 * Json.NET
 * Jint - Javascript Interpreter for .NET
