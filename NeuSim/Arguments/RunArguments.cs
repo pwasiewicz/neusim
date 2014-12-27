@@ -29,7 +29,7 @@
         public ExportSubOptions ExportVerb { get; set; }
 
         [VerbOption("import", HelpText = "Imports the previously exported network.")]
-        public LearnSubOptions ImportVerb { get; set; }
+        public ImportSubOptions ImportVerb { get; set; }
 
         [VerbOption("exported", HelpText = "Manages exported networks.")]
         public ExportedSubOptions ExportedVerb { get; set; }
