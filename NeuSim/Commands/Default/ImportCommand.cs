@@ -43,7 +43,7 @@
             var fullPath = Path.Combine(this.SessionContext.ContextDirectory,
                                         string.Format("{0}.{1}", options.Name, ExportingContext.ExporedExtensions));
 
-            return !File.Exists(fullPath);
+            return File.Exists(fullPath);
         }
     }
 }
