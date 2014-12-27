@@ -39,7 +39,11 @@
             foreach (var learnCase in learnCases)
             {
                 var output = this.SessionContext.NeuronNetwork.Process(learnCase.Input);
-                if (Math.Abs(output - learnCase.Output) < 0.5)
+
+                var outputTransformed = this.SessionContext.TransformResult(output);
+                var properOutputTransfomred = this.SessionContext.TransformResult(learnCase.Output);
+
+                if (properOutputTransfomred.Equals(outputTransformed))
                 {
                     properOutputs += 1;
                 }
