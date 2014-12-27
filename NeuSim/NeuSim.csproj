@@ -68,6 +68,7 @@
     <Compile Include="Commands\Default\InitCommand.cs" />
     <Compile Include="Commands\Default\LearnCommand.cs" />
     <Compile Include="Commands\Default\SimulateCommand.cs" />
+    <Compile Include="Commands\Default\StatsCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Context\SessionContext.cs" />
     <Compile Include="Exceptions\Default\ExternalScriptException.cs" />

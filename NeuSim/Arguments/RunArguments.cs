@@ -33,6 +33,15 @@
 
         [VerbOption("exported", HelpText = "Manages exported networks.")]
         public ExportedSubOptions ExportedVerb { get; set; }
+
+        [VerbOption("stats", HelpText = "Generates states for learn case.")]
+        public StatsSubOptions StatesVerb { get; set; }
+    }
+
+    public class StatsSubOptions : DefaultHelpable
+    {
+        [Option('f', "file", Required = true, HelpText = "File name to generate stats.")]
+        public string File { get; set; }
     }
 
     internal class ExportedSubOptions : DefaultHelpable
