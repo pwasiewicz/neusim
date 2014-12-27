@@ -39,7 +39,7 @@
             foreach (var learnCase in learnCases)
             {
                 var output = this.SessionContext.NeuronNetwork.Process(learnCase.Input);
-                if (Math.Abs(output - learnCase.Output) < float.Epsilon)
+                if (Math.Abs(output - learnCase.Output) < 0.5)
                 {
                     properOutputs += 1;
                 }

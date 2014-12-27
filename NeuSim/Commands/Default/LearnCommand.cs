@@ -62,6 +62,7 @@
                                                                                                                               (LearnCaseExt)),
                                                                                                                      options
                                                                                                                          .Force));
+                return;
             }
 
             if (options.File != null)
@@ -89,8 +90,6 @@
                                                                                                                  filePath)),
                                                                                        options
                                                                                            .Force));
-
-                this.LearnCase(filePath);
             }
 
 
