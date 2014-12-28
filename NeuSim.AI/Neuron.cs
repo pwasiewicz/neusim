@@ -9,7 +9,7 @@
     {
         private static readonly Lazy<Random> RandomHolder = new Lazy<Random>(() => new Random());
 
-        private readonly double[] inputs;
+        private double[] inputs;
         private readonly double[] weights;
         private double bias;
 
@@ -50,7 +50,7 @@
         public double[] Inputs
         {
             get { return this.inputs; }
-            set { value.CopyTo(this.inputs, 0); }
+            set { this.inputs = value; }
         }
 
         public double GetOutput()
