@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>applications-education-mathematics.ico</ApplicationIcon>
+    <ApplicationIcon>neusim_logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommandLine">
@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="applications-education-mathematics.ico" />
+    <Content Include="neusim_logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
