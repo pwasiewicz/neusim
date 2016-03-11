@@ -1,6 +1,11 @@
 neusim
 ======
 
+![Logo](https://raw.githubusercontent.com/pwasiewicz/neusim/master/neusim_logo.png)
+
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/pwasiewicz/neusim/master/LICENSE)
+[![Build status](https://ci.appveyor.com/api/projects/status/rkjr6emoy14n94pm?svg=true)](https://ci.appveyor.com/project/pwasiewicz/neusim)
+
  Command-line app to simulates multilayer neuron network. There are three layers so far: input, hidden and output, so should be enough to approximate lots of function.
 
 Features
