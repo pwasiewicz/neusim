@@ -152,14 +152,14 @@
         public static ConfigSubOptions Default()
         {
             return new ConfigSubOptions
-                   {
-                       ActivationFunc = "1.0 / (1.0 + Exp(-x))",
-                       DerivativeActivationFunc = "x * (1 - x)",
-                       LearnEpoch = 10000,
-                       ResultParserFile = null,
-                       Tolerance = 0.001,
-                       LearnStep = 1
-                   };
+            {
+                ActivationFunc = "1.0 / (1.0 + Exp(-x))",
+                DerivativeActivationFunc = "x * (1 - x)",
+                LearnEpoch = 10000,
+                ResultParserFile = null,
+                Tolerance = 0.001,
+                LearnStep = 0.5
+            };
         }
     }
 
