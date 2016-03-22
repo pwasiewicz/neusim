@@ -11,6 +11,7 @@
     using Services.Implementations;
     using System;
     using System.Reflection;
+    using CommandLine.Text;
 
     public static class Program
     {
@@ -34,7 +35,7 @@
                                                            invokerVerbOptions = verbOptions;
                                                        }, () => invokerVerbOptions = null);
 
-            if (invokedVerb == null)
+            if (string.IsNullOrEmpty(invokedVerb))
             {
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
